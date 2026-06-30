@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Programs PRD — Editions, Assessments &amp; the Link · Atharnami</title>
+<meta name="description" content="Product requirements: a clean Organization → Program → Edition → Assessment → Indicator hierarchy, and a source-agnostic Link that turns a survey question into a reviewed indicator value." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F6F2EA;
+  --paper-2:#FBF8F2;
+  --card:#FFFFFF;
+  --ink:#1A1A14;
+  --ink-soft:#4B4A40;
+  --ink-faint:#7C7A6C;
+  --line:#E2DBCC;
+  --line-soft:#ECE6D9;
+  --forest:#28584A;
+  --forest-soft:#3E7263;
+  --clay:#B25B36;
+  --clay-soft:#C8784F;
+  --gold:#9C7A1E;
+  --green:#3E7263;
+  --amber:#B07A18;
+  --red:#A8472E;
+  --grey:#8A8676;
+  --shadow:0 1px 2px rgba(26,26,20,.04), 0 8px 28px rgba(26,26,20,.06);
+  --shadow-lg:0 2px 6px rgba(26,26,20,.05), 0 24px 60px rgba(26,26,20,.10);
+  --rad:14px;
+  --maxw:1120px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Hanken Grotesk',system-ui,sans-serif;
+  font-size:17px;line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  mix-blend-mode:multiply;opacity:.6;
+}
+.ar{font-family:'IBM Plex Sans Arabic','Hanken Grotesk',sans-serif;font-weight:500;direction:rtl;unicode-bidi:isolate;display:inline-block;line-height:1;}
+.mono{font-family:'IBM Plex Mono',monospace;}
+a{color:inherit}
+::selection{background:var(--forest);color:var(--paper-2)}
+
+/* ---------- layout ---------- */
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;position:relative;z-index:1}
+section{position:relative;z-index:1}
+.sec{padding:84px 0;border-top:1px solid var(--line-soft)}
+.sec:first-of-type{border-top:none}
+
+/* ---------- top progress + nav ---------- */
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--forest),var(--clay));z-index:60;transition:width .12s linear}
+nav.deck{
+  position:sticky;top:0;z-index:50;
+  background:rgba(246,242,234,.86);
+  backdrop-filter:saturate(140%) blur(12px);
+  -webkit-backdrop-filter:saturate(140%) blur(12px);
+  border-bottom:1px solid var(--line);
+}
+nav.deck .row{max-width:var(--maxw);margin:0 auto;display:flex;align-items:center;gap:18px;padding:11px 28px}
+nav.deck .brand{font-family:'Fraunces',serif;font-weight:600;font-size:16px;letter-spacing:.2px;white-space:nowrap;display:flex;align-items:center;gap:9px}
+nav.deck .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--clay);box-shadow:0 0 0 4px rgba(178,91,54,.14)}
+nav.deck .links{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;margin-left:auto}
+nav.deck .links::-webkit-scrollbar{display:none}
+nav.deck a.nlink{
+  font-size:13px;font-weight:500;color:var(--ink-faint);
+  padding:6px 11px;border-radius:8px;white-space:nowrap;text-decoration:none;
+  transition:color .18s,background .18s;
+}
+nav.deck a.nlink:hover{color:var(--ink);background:rgba(40,88,74,.07)}
+nav.deck a.nlink.active{color:var(--forest);background:rgba(40,88,74,.10)}
+@media(max-width:860px){nav.deck .brand .full{display:none}}
+
+/* ---------- hero ---------- */
+.hero{padding:78px 0 70px;position:relative;overflow:hidden}
+.hero::after{
+  content:"";position:absolute;right:-180px;top:-120px;width:560px;height:560px;border-radius:50%;
+  background:radial-gradient(circle at 30% 30%,rgba(62,114,99,.16),rgba(62,114,99,0) 62%);
+  pointer-events:none;
+}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:9px;font-size:12.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--forest);margin-bottom:26px;
+}
+.eyebrow .rule{width:34px;height:1px;background:var(--forest);opacity:.5}
+h1.title{
+  font-family:'Fraunces',serif;font-weight:600;letter-spacing:-.015em;
+  font-size:clamp(38px,6.2vw,72px);line-height:1.02;margin-bottom:6px;max-width:16ch;
+}
+h1.title em{font-style:italic;color:var(--clay)}
+.subtitle{font-family:'Fraunces',serif;font-style:italic;font-weight:400;font-size:clamp(19px,2.4vw,26px);color:var(--ink-soft);max-width:34ch;margin-top:14px;line-height:1.3}
+.lede{max-width:62ch;margin-top:30px;font-size:18.5px;color:var(--ink-soft);line-height:1.66}
+.lede strong{color:var(--ink);font-weight:600}
+.meta-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:38px}
+.tag{
+  font-size:12.5px;font-weight:600;letter-spacing:.02em;padding:7px 13px;border-radius:999px;
+  background:var(--card);border:1px solid var(--line);color:var(--ink-soft);box-shadow:var(--shadow);
+}
+.tag b{color:var(--ink);font-weight:600}
+.tag.accent{border-color:rgba(40,88,74,.3);color:var(--forest);background:rgba(40,88,74,.05)}
+
+/* anim */
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+.stagger>*{opacity:0;transform:translateY(16px);animation:rise .8s cubic-bezier(.2,.7,.2,1) forwards}
+@keyframes rise{to{opacity:1;transform:none}}
+.stagger>*:nth-child(1){animation-delay:.05s}
+.stagger>*:nth-child(2){animation-delay:.16s}
+.stagger>*:nth-child(3){animation-delay:.27s}
+.stagger>*:nth-child(4){animation-delay:.38s}
+.stagger>*:nth-child(5){animation-delay:.49s}
+.stagger>*:nth-child(6){animation-delay:.60s}
+@media(prefers-reduced-motion:reduce){.reveal,.stagger>*{opacity:1!important;transform:none!important;animation:none!important}}
+
+/* ---------- section headers ---------- */
+.sec-num{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;color:var(--clay);letter-spacing:.05em}
+h2.sh{font-family:'Fraunces',serif;font-weight:600;letter-spacing:-.01em;font-size:clamp(28px,3.8vw,40px);line-height:1.08;margin:10px 0 0}
+.sec-intro{max-width:64ch;margin-top:18px;font-size:18px;color:var(--ink-soft)}
+.sec-intro strong{color:var(--ink);font-weight:600}
+.sec-head{margin-bottom:42px}
+
+/* ---------- generic prose ---------- */
+p.body{max-width:66ch;color:var(--ink-soft);margin-top:16px}
+p.body strong{color:var(--ink);font-weight:600}
+.callout{
+  margin-top:26px;padding:20px 24px;border-left:3px solid var(--clay);
+  background:linear-gradient(90deg,rgba(178,91,54,.06),rgba(178,91,54,0));
+  border-radius:0 var(--rad) var(--rad) 0;font-family:'Fraunces',serif;font-style:italic;font-size:19px;color:var(--ink);max-width:62ch;line-height:1.45;
+}
+.callout.green{border-left-color:var(--forest);background:linear-gradient(90deg,rgba(40,88,74,.06),rgba(40,88,74,0))}
+
+/* ---------- cards / grids ---------- */
+.grid{display:grid;gap:20px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+@media(max-width:820px){.g2,.g3{grid-template-columns:1fr}}
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--rad);
+  padding:24px;box-shadow:var(--shadow);transition:transform .25s,box-shadow .25s,border-color .25s;
+}
+.card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);border-color:var(--line)}
+.card h3{font-family:'Fraunces',serif;font-weight:600;font-size:20px;margin-bottom:6px;letter-spacing:-.01em}
+.card .k{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--clay);font-weight:600;margin-bottom:12px;display:block}
+.card p{color:var(--ink-soft);font-size:15.5px}
+
+/* ---------- tables ---------- */
+.tbl-wrap{margin-top:26px;border:1px solid var(--line);border-radius:var(--rad);overflow:hidden;box-shadow:var(--shadow);background:var(--card)}
+.tbl-scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:15px;min-width:540px}
+caption{caption-side:top;text-align:left;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);padding:16px 20px 0;font-weight:600}
+thead th{
+  text-align:left;font-weight:600;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-faint);
+  padding:14px 18px;background:var(--paper-2);border-bottom:1px solid var(--line);white-space:nowrap;
+}
+tbody td{padding:14px 18px;border-bottom:1px solid var(--line-soft);vertical-align:top;color:var(--ink-soft)}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:rgba(40,88,74,.025)}
+tbody td b,tbody td strong{color:var(--ink);font-weight:600}
+td .term{font-family:'Fraunces',serif;font-weight:600;font-size:16px;color:var(--ink)}
+td.not{color:var(--ink-faint);font-style:italic}
+.code-cell{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--forest);background:rgba(40,88,74,.06);padding:2px 7px;border-radius:6px;white-space:nowrap;font-weight:500}
+
+/* ---------- hierarchy diagram ---------- */
+.hier{margin-top:30px;display:flex;flex-direction:column;gap:0;position:relative}
+.hier .node{
+  position:relative;background:var(--card);border:1px solid var(--line);border-radius:12px;
+  padding:16px 20px;box-shadow:var(--shadow);display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;
+}
+.hier .lvl{margin-left:calc(var(--d,0)*30px);transition:transform .3s}
+.hier .lvl:hover .node{transform:translateX(3px);border-color:rgba(40,88,74,.35)}
+.hier .connector{height:18px;width:2px;background:var(--line);margin-left:calc(var(--d,0)*30px + 24px)}
+.hier .nm{font-family:'Fraunces',serif;font-weight:600;font-size:19px;letter-spacing:-.01em}
+.hier .badge{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:3px 9px;border-radius:999px;background:rgba(40,88,74,.09);color:var(--forest)}
+.hier .desc{color:var(--ink-faint);font-size:14.5px}
+.hier .node.accent{border-color:rgba(178,91,54,.35);background:linear-gradient(180deg,#fff,rgba(178,91,54,.03))}
+.hier .node.accent .badge{background:rgba(178,91,54,.1);color:var(--clay)}
+.leaf-row{margin-left:calc(5*30px);margin-top:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:var(--ink-soft)}
+.leaf-row .chip{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 11px;font-weight:500;box-shadow:var(--shadow)}
+.leaf-row .chip.ind{color:var(--forest);border-color:rgba(40,88,74,.3)}
+.leaf-row .chip.link{color:var(--clay);border-color:rgba(178,91,54,.3);background:rgba(178,91,54,.04)}
+.leaf-row .chip.val{color:var(--ink);border-color:var(--line)}
+.leaf-row .arr{color:var(--clay);font-weight:600}
+@media(max-width:760px){.hier .lvl,.hier .connector{margin-left:calc(var(--d,0)*16px)!important}.leaf-row{margin-left:0}}
+
+/* ---------- the sentence ---------- */
+.sentence{
+  margin-top:30px;padding:34px 30px;border-radius:var(--rad);
+  background:var(--ink);color:var(--paper-2);box-shadow:var(--shadow-lg);position:relative;overflow:hidden;
+}
+.sentence::before{content:"";position:absolute;inset:0;background:radial-gradient(600px 200px at 80% 0%,rgba(178,91,54,.22),transparent 70%);pointer-events:none}
+.sentence .lbl{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(246,242,234,.55);margin-bottom:18px}
+.s-line{display:flex;flex-wrap:wrap;align-items:center;gap:9px;font-size:clamp(16px,2vw,21px);line-height:2.1;position:relative}
+.pill{
+  display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border-radius:999px;font-weight:500;font-size:.92em;
+  border:1px solid rgba(246,242,234,.18);background:rgba(246,242,234,.06);position:relative;
+}
+.pill .pk{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:rgba(246,242,234,.5)}
+.pill.agg{background:rgba(178,91,54,.22);border-color:rgba(200,120,79,.5);color:#F4D9C8}
+.pill.q{background:rgba(62,114,99,.28);border-color:rgba(62,114,99,.6);color:#CDE6DD}
+.pill.src{background:rgba(246,242,234,.1)}
+.pill.flt{background:rgba(246,242,234,.06);color:rgba(246,242,234,.78)}
+.s-line .arrow{color:var(--clay-soft);font-weight:700;font-size:1.1em;margin:0 2px}
+.result{font-family:'IBM Plex Mono',monospace;font-weight:600;color:#fff;font-size:1.05em}
+.result .n{color:rgba(246,242,234,.55);font-weight:400;font-size:.82em}
+.s-note{margin-top:18px;font-size:13.5px;color:rgba(246,242,234,.6);font-style:italic;font-family:'Fraunces',serif}
+
+/* ---------- numbered beats ---------- */
+.beats{margin-top:28px;counter-reset:b;display:grid;gap:14px}
+.beat{display:flex;gap:16px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 20px;box-shadow:var(--shadow);transition:border-color .2s}
+.beat:hover{border-color:rgba(40,88,74,.3)}
+.beat::before{
+  counter-increment:b;content:counter(b);flex:none;width:30px;height:30px;border-radius:50%;
+  background:var(--forest);color:var(--paper-2);font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:14px;
+  display:grid;place-items:center;margin-top:1px;
+}
+.beat .bt{color:var(--ink-soft);font-size:15.5px}
+.beat .bt b{color:var(--ink);font-weight:600}
+.beat .bt code{font-family:'IBM Plex Mono',monospace;font-size:13px;background:rgba(40,88,74,.07);color:var(--forest);padding:1px 6px;border-radius:5px}
+
+/* ---------- phasing ---------- */
+.phase{border:1px solid var(--line);border-radius:var(--rad);background:var(--card);box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column}
+.phase .ph-h{padding:18px 22px;border-bottom:1px solid var(--line-soft);display:flex;align-items:center;justify-content:space-between;gap:12px}
+.phase .ph-h h3{font-family:'Fraunces',serif;font-size:21px;font-weight:600}
+.phase .pill-ph{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;padding:4px 10px;border-radius:999px}
+.p1 .pill-ph{background:rgba(40,88,74,.12);color:var(--forest)}
+.p2 .pill-ph{background:rgba(178,91,54,.12);color:var(--clay)}
+.pf .pill-ph{background:rgba(124,122,108,.14);color:var(--ink-faint)}
+.phase ul{list-style:none;padding:16px 22px;display:grid;gap:11px}
+.phase li{position:relative;padding-left:22px;font-size:15px;color:var(--ink-soft)}
+.phase li strong{color:var(--ink);font-weight:600}
+.phase li::before{content:"";position:absolute;left:2px;top:9px;width:7px;height:7px;border-radius:2px;background:var(--clay)}
+.p1 li::before{background:var(--forest)}
+.pf li::before{background:var(--ink-faint)}
+
+/* ---------- removals ---------- */
+.rm{border:1px solid var(--line);border-radius:var(--rad);background:var(--card);box-shadow:var(--shadow);padding:24px;position:relative;overflow:hidden}
+.rm .x{font-family:'Fraunces',serif;font-size:22px;font-weight:600;display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.rm .x .mk{width:30px;height:30px;border-radius:8px;background:rgba(168,71,46,.1);color:var(--red);display:grid;place-items:center;font-size:18px;font-weight:700;flex:none}
+.rm p{color:var(--ink-soft);font-size:15.5px;margin-top:6px}
+.rm p strong{color:var(--ink)}
+.rm .out{margin-top:14px;display:flex;flex-wrap:wrap;gap:7px}
+.rm .out code{font-family:'IBM Plex Mono',monospace;font-size:12px;background:rgba(168,71,46,.06);color:var(--red);border:1px solid rgba(168,71,46,.18);padding:3px 8px;border-radius:6px;text-decoration:line-through;text-decoration-color:rgba(168,71,46,.4)}
+.rm .keep{margin-top:16px;padding:12px 16px;border-radius:10px;background:rgba(40,88,74,.06);border:1px solid rgba(40,88,74,.18);font-size:14.5px;color:var(--forest)}
+.rm .keep b{color:var(--forest)}
+
+/* ---------- health tiers ---------- */
+.tiers{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+.tier{flex:1;min-width:150px;border-radius:12px;padding:16px 18px;border:1px solid var(--line);background:var(--card);box-shadow:var(--shadow)}
+.tier .dot{width:12px;height:12px;border-radius:50%;display:inline-block;margin-right:8px;vertical-align:middle}
+.tier .lab{font-family:'Fraunces',serif;font-weight:600;font-size:17px}
+.tier .rng{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--ink-faint);margin-top:4px}
+.tier.g{border-color:rgba(62,114,99,.4)} .tier.g .dot{background:var(--green)}
+.tier.a{border-color:rgba(176,122,24,.4)} .tier.a .dot{background:var(--amber)}
+.tier.r{border-color:rgba(168,71,46,.4)} .tier.r .dot{background:var(--red)}
+.repnum{margin-top:22px;display:inline-flex;align-items:center;gap:0;border-radius:12px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow);font-family:'IBM Plex Mono',monospace}
+.repnum .scope{background:var(--paper-2);padding:12px 16px;font-size:13px;color:var(--ink-faint);font-weight:500;border-right:1px solid var(--line)}
+.repnum .val{background:var(--forest);color:var(--paper-2);padding:12px 18px;font-size:18px;font-weight:600}
+
+/* ---------- ledger ---------- */
+.ledger td .num{font-family:'IBM Plex Mono',monospace;font-weight:600;color:var(--clay)}
+
+/* ---------- success path ---------- */
+.path{margin-top:28px;display:grid;gap:0}
+.step{display:flex;gap:16px;align-items:flex-start;padding:14px 0;position:relative}
+.step:not(:last-child)::after{content:"";position:absolute;left:13px;top:34px;bottom:-6px;width:2px;background:linear-gradient(var(--forest),var(--clay));opacity:.3}
+.step .ico{flex:none;width:28px;height:28px;border-radius:50%;border:2px solid var(--forest);background:var(--paper);display:grid;place-items:center;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:var(--forest);z-index:1}
+.step .st{font-size:16px;color:var(--ink-soft)}
+.step .st b{color:var(--ink);font-weight:600}
+.step .st .mono{color:var(--forest);font-size:14px}
+
+/* ---------- footer ---------- */
+footer{padding:64px 0 80px;border-top:1px solid var(--line)}
+footer .fin{font-family:'Fraunces',serif;font-style:italic;font-size:clamp(22px,3vw,30px);line-height:1.3;max-width:24ch;color:var(--ink)}
+footer .fin em{color:var(--clay);font-style:italic}
+footer .credit{margin-top:34px;font-size:13.5px;color:var(--ink-faint);display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center}
+footer .credit .sep{width:4px;height:4px;border-radius:50%;background:var(--line)}
+
+/* status chips inline */
+.chip-s{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.03em;padding:2px 8px;border-radius:6px;text-transform:uppercase}
+.chip-s.pre{background:rgba(176,122,24,.13);color:var(--amber)}
+.chip-s.post{background:rgba(62,114,99,.14);color:var(--green)}
+.chip-s.only{background:rgba(124,122,108,.14);color:var(--ink-faint)}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<nav class="deck">
+  <div class="row">
+    <span class="brand"><span class="dot"></span>Atharnami<span class="full" style="color:var(--ink-faint);font-weight:400">&nbsp;· Programs PRD</span></span>
+    <div class="links" id="navlinks">
+      <a class="nlink" href="#summary">Summary</a>
+      <a class="nlink" href="#problem">Problem</a>
+      <a class="nlink" href="#model">Model</a>
+      <a class="nlink" href="#link">The Link</a>
+      <a class="nlink" href="#overview">Overview &amp; Health</a>
+      <a class="nlink" href="#comparison">Comparison</a>
+      <a class="nlink" href="#removals">Removals</a>
+      <a class="nlink" href="#migration">Migration</a>
+      <a class="nlink" href="#decisions">Decisions</a>
+      <a class="nlink" href="#phasing">Phasing</a>
+      <a class="nlink" href="#success">Success</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="wrap stagger">
+    <div class="eyebrow"><span class="rule"></span>Product Requirements · v2 · Draft for approval</div>
+    <h1 class="title">Programs that <em>repeat</em>, measured <em>per&nbsp;run</em>.</h1>
+    <p class="subtitle">Editions, Assessments &amp; the Input&nbsp;→&nbsp;Indicator Link.</p>
+    <p class="lede">Atharnami's core unit today is a single flat <strong>Program</strong> with a single flat <strong>Theory of Change</strong> — and it breaks the moment reality arrives. This PRD introduces a clean hierarchy — <strong>Organization → Program → Edition → Assessment</strong> — where the Assessment owns the ToC, plus a source-agnostic <strong>Link</strong> that turns a survey question into a reviewed indicator value with full provenance. Along the way it removes two concepts that added confusion without truth.</p>
+    <div class="meta-row">
+      <span class="tag accent">For review by&nbsp; <b>Anas</b></span>
+      <span class="tag">Owner&nbsp; <b>Baraa · Qararat</b></span>
+      <span class="tag">Drafted &amp; revised&nbsp; <b>2026-06-30</b></span>
+      <span class="tag">Author&nbsp; <b>Nami</b></span>
+    </div>
+  </div>
+</header>
+
+<!-- ============ 1 · SUMMARY ============ -->
+<section id="summary" class="sec">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">§1 — One paragraph</span>
+      <h2 class="sh">The whole thing, in one breath.</h2>
+    </div>
+    <p class="body reveal" style="font-size:19px;max-width:70ch">A real program <strong>repeats</strong> — every year, or several cohorts a year. It is <strong>evaluated per run</strong>, sometimes <strong>pre and post</strong>, sometimes for <strong>different groups of people</strong> — and each of those needs <strong>its own ToC and its own numbers</strong>. On top of that, even when data is collected, there is no way to turn a survey into an indicator's number — the pipeline was never built.</p>
+    <div class="callout green reveal">This PRD introduces a clean hierarchy where the Assessment owns the ToC, and a source-agnostic Link that turns a survey question — later interviews, records — into a reviewed indicator value with full provenance.</div>
+    <div class="grid g3 reveal" style="margin-top:32px">
+      <div class="card">
+        <span class="k">What's new</span>
+        <h3>A hierarchy that holds reality</h3>
+        <p>Organization → Program → Edition (a run / cohort) → Assessment (Pre/Post × group). The Assessment owns its ToC, survey, values and snapshots.</p>
+      </div>
+      <div class="card">
+        <span class="k">The heart</span>
+        <h3>An indicator's number is a sentence</h3>
+        <p>A source-agnostic Link: <span class="mono" style="font-size:13px;color:var(--forest)">source → selector → aggregation → reviewed number</span>, with live preview, drill-back and provenance.</p>
+      </div>
+      <div class="card">
+        <span class="k">The subtraction</span>
+        <h3>Two concepts removed</h3>
+        <p>Partners and Funders/Grants — both added confusion without truth. The Organization becomes the top of the hierarchy.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2 · PROBLEM ============ -->
+<section id="problem" class="sec">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">§2 — From a real program</span>
+      <h2 class="sh">Two walls, opening one program.</h2>
+      <p class="sec-intro">The consultant opens <span class="ar" lang="ar">الاستدامة المالية</span> <em>(Financial Sustainability)</em> under Salem bin Mahfouz. The post data is collected and imported. Then the model fails.</p>
+    </div>
+    <div class="grid g2 reveal">
+      <div class="card">
+        <span class="k">Wall 1 — Structure</span>
+        <h3>The ToC can't hold a year, a cohort, or a pre/post.</h3>
+        <p>It's one flat map per program — no way to go back to last year, or to hold the Pre and the Post side by side.</p>
+      </div>
+      <div class="card">
+        <span class="k">Wall 2 — Pipeline</span>
+        <h3>There's nowhere to put the survey.</h3>
+        <p><span class="mono" style="font-size:13px;color:var(--forest)">linked_survey_id</span> points at a <em>whole survey</em> and nothing reads it. There is <strong>no rule</strong> for how N responses become <em>one</em> number, and <strong>no place</strong> the number lands.</p>
+      </div>
+    </div>
+    <div class="callout reveal">The live data proved it: this one real program exists as <strong>two disconnected records</strong> — <span class="ar" lang="ar">…للمؤسسات</span> and <span class="ar" lang="ar">…٢٠٢٥ بعدي</span> — because there was no Edition / Assessment layer to hold them together. The model below merges them: <em>2025 Post</em> and <em>2026 Pre</em> of one Program.</div>
+  </div>
+</section>
+
+<!-- ============ 3 · MODEL ============ -->
+<section id="model" class="sec">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">§3 — The model</span>
+      <h2 class="sh">One hierarchy, parent to leaf.</h2>
+      <p class="sec-intro">The <strong>Assessment</strong> is the centre of gravity: it owns the ToC, the survey, the values and the snapshots. Everything above it is identity; everything below it is measurement.</p>
+    </div>
+
+    <div class="hier reveal">
+      <div class="lvl" style="--d:0"><div class="node"><span class="badge">org</span><span class="nm">Organization</span><span class="desc">the client we contracted</span></div></div>
+      <div class="connector" style="--d:0"></div>
+      <div class="lvl" style="--d:1"><div class="node"><span class="badge">program</span><span class="nm">Program</span><span class="desc">universal identity — persists across runs</span></div></div>
+      <div class="connector" style="--d:1"></div>
+      <div class="lvl" style="--d:2"><div class="node"><span class="badge">edition</span><span class="nm">Edition</span><span class="desc">one run / cohort — label defaults to year, editable; several per year allowed</span></div></div>
+      <div class="connector" style="--d:2"></div>
+      <div class="lvl" style="--d:3"><div class="node accent"><span class="badge">assessment</span><span class="nm">Assessment</span><span class="desc">Pre | Post × group — owns its ToC + survey + values + snapshots</span></div></div>
+      <div class="connector" style="--d:3"></div>
+      <div class="lvl" style="--d:4"><div class="node"><span class="badge">indicator</span><span class="nm">Indicator</span><span class="desc">a measured outcome on the ToC</span></div></div>
+      <div class="leaf-row">
+        <span class="chip ind">Indicator</span><span class="arr">←</span><span class="chip link">Link</span><span class="arr">←</span><span class="chip">survey question + aggregation</span><span class="arr">→</span><span class="chip val">Value <span style="color:var(--ink-faint)">(+ provenance)</span></span>
+      </div>
+    </div>
+
+    <!-- glossary -->
+    <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin:54px 0 0" class="reveal">Glossary</h3>
+    <div class="tbl-wrap reveal">
+      <div class="tbl-scroll">
+      <table>
+        <caption>Terms — and what they are not</caption>
+        <thead><tr><th style="width:16%">Term</th><th>Definition</th><th style="width:24%">Not</th></tr></thead>
+        <tbody>
+          <tr><td><span class="term">Program</span></td><td>The universal identity of an intervention. Persists across runs.</td><td class="not">A single run</td></tr>
+          <tr><td><span class="term">Edition</span></td><td>One <b>run / cohort / delivery</b> — a distinct set of beneficiaries, at a distinct time. Label defaults to the year, editable. Several can share a year.</td><td class="not">"A year" — a year is just the default label</td></tr>
+          <tr><td><span class="term">Assessment</span></td><td>A distinct measurement effort inside an edition: <b>type = Pre or Post</b>, plus a <b>group</b>. Owns its own ToC, survey, values, snapshots.</td><td class="not">A "final / meta" type — there are only Pre and Post</td></tr>
+          <tr><td><span class="term">Group</span></td><td>The respondent population being measured (e.g. Students, Partners-as-respondents, Institutions). Chosen from a <b>program-scoped controlled list</b>. The thread comparison runs along.</td><td class="not">Free text</td></tr>
+          <tr><td><span class="term">Link</span></td><td>A source-agnostic binding that produces one indicator value: <span class="code-cell">source → selector → aggregation → reviewed number</span>.</td><td class="not">A "survey link" — it generalizes to interviews, records, APIs</td></tr>
+          <tr><td><span class="term">Lineage key</span></td><td>A stable id on a node/indicator carried across clones, so the same indicator can be matched across editions / assessments.</td><td class="not">A version number</td></tr>
+          <tr><td><span class="term">Provenance</span></td><td>Where a value came from: <span class="code-cell">measured · client_provided · carried_from_prior_edition · manual</span>.</td><td class="not">A correctness flag</td></tr>
+          <tr><td><span class="term">Snapshot</span></td><td>A point-in-time freeze of an <b>assessment's</b> live values <b>during collection</b> — the progress curve.</td><td class="not">The cross-period history — that's Editions</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+    <!-- edition vs group test -->
+    <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin:54px 0 0" class="reveal">Edition vs. Group — the test that keeps them apart</h3>
+    <div class="tbl-wrap reveal">
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th style="width:36%">You're looking at…</th><th style="width:22%">It's a new…</th><th>Because</th></tr></thead>
+        <tbody>
+          <tr><td>A different <b>cohort / delivery</b> — different beneficiaries <em>received</em> the program</td><td><span class="term" style="color:var(--clay)">Edition</span></td><td>A separate run, its own ToC, its own pre/post</td></tr>
+          <tr><td>The <b>same run</b>, a different <b>respondent type</b> you <em>survey</em> about it</td><td><span class="term" style="color:var(--forest)">Assessment (group)</span></td><td>Same run, you're measuring different people's view</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+    <div class="callout reveal">Different people <strong>receiving</strong> the program → <strong>Edition</strong>. Different people <strong>surveyed about</strong> the same run → <strong>group / Assessment</strong>.</div>
+
+    <!-- load-bearing decisions -->
+    <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin:54px 0 22px" class="reveal">Load-bearing decisions (resolved)</h3>
+    <div class="grid g2 reveal">
+      <div class="card"><span class="k">01 · Independence</span><p style="font-size:16px"><b style="color:var(--ink)">Editions are independent and frozen.</b> Editing 2025 never propagates to 2026.</p></div>
+      <div class="card"><span class="k">02 · Ownership</span><p style="font-size:16px"><b style="color:var(--ink)">The ToC belongs to the Assessment.</b> Pre/Post and different groups can have genuinely different ToCs — so pre↔post, group, and year-over-year are all the same clone-and-match relationship.</p></div>
+      <div class="card"><span class="k">03 · Strictness</span><p style="font-size:16px"><b style="color:var(--ink)">Assessment type is strictly Pre / Post.</b> A different group is a separate Assessment, not a third type.</p></div>
+      <div class="card"><span class="k">04 · Direction</span><p style="font-size:16px"><b style="color:var(--ink)">Comparison runs along a group, through time</b> — Students Pre→Post, Students 2025→2026. Never across groups. Optional, lineage-driven, Phase 2.</p></div>
+      <div class="card" style="grid-column:1/-1"><span class="k">05 · The common case stays trivial</span><p style="font-size:16px">A post-only, single-group program = <b style="color:var(--ink)">one Edition, one Assessment, one ToC, one number per indicator</b>. The breadcrumb is always shown — <span class="mono" style="font-size:14px;color:var(--forest)"><span class="ar" lang="ar">الاستدامة المالية</span> › 2025 › Post</span>.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4 · THE LINK ============ -->
+<section id="link" class="sec">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">§4 — The Input→Indicator Link</span>
+      <h2 class="sh">The heart: an indicator's number is a <em style="font-style:italic;color:var(--clay)">sentence</em>.</h2>
+      <p class="sec-intro">The consultant never "writes a metric." They <strong>point at a question and choose how to count it.</strong> Each clause is an editable pill.</p>
+    </div>
+
+    <div class="sentence reveal">
+      <div class="lbl">Mental model — read it left to right</div>
+      <div class="s-line">
+        <span class="pill agg"><span class="pk">aggregation</span>average</span>
+        <span style="color:rgba(246,242,234,.6)">of</span>
+        <span class="pill q"><span class="pk">field / question</span>Q7 · annual operations spend</span>
+        <span style="color:rgba(246,242,234,.6)">from</span>
+        <span class="pill src"><span class="pk">source</span>Post survey 2025</span>
+        <span style="color:rgba(246,242,234,.6)">where</span>
+        <span class="pill flt"><span class="pk">filter</span>sector = education</span>
+        <span class="arrow">→</span>
+        <span class="result">SAR&nbsp;412,000 <span class="n">(n=38)</span></span>
+      </div>
+      <div class="s-note">└ aggregation · └ field/question · └ source · └ live preview — the number appears before commit.</div>
+    </div>
+
+    <!-- aggregation vocabulary -->
+    <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin:54px 0 4px" class="reveal">The aggregation vocabulary</h3>
+    <p class="body reveal" style="margin-top:8px">8 presets + 1 escape hatch. Field type <strong>gates</strong> the list — you only ever see math that makes sense.</p>
+    <div class="tbl-wrap reveal">
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th style="width:24%">Aggregation</th><th style="width:22%">For</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><span class="code-cell">count</span> / <span class="code-cell">count_distinct</span></td><td>any / people</td><td># responses, # unique beneficiaries</td></tr>
+          <tr><td><span class="code-cell">sum</span></td><td>numeric</td><td>total operations spend</td></tr>
+          <tr><td><span class="code-cell">average</span></td><td>numeric</td><td>avg operations spend</td></tr>
+          <tr><td><span class="code-cell">percent_selecting</span></td><td>choice</td><td>% who chose "improved"</td></tr>
+          <tr><td><span class="code-cell">ratio (A÷B)</span></td><td>two links</td><td>custom rates — the two-input case</td></tr>
+          <tr><td><span class="code-cell">NPS</span></td><td>0–10 scale</td><td>net promoter (preset)</td></tr>
+          <tr><td><span class="code-cell">median</span></td><td>numeric</td><td><em>advanced, hidden by default</em></td></tr>
+          <tr><td><span class="code-cell" style="color:var(--clay);background:rgba(178,91,54,.08)">custom_formula</span></td><td>freedom</td><td>any formula — <b>behind "Advanced," never the default</b></td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+    <div class="callout reveal"><strong>v1 = one indicator ← one binding</strong> (one question). <span class="mono" style="font-style:normal;font-size:15px">ratio</span> covers two inputs; <span class="mono" style="font-style:normal;font-size:15px">custom_formula</span> is the escape hatch. A dedicated multi-question index/scale builder is deferred to a later phase.</div>
+
+    <!-- compute & review beat -->
+    <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin:54px 0 0" class="reveal">The "Compute &amp; review" beat — why it's trusted</h3>
+    <div class="beats reveal">
+      <div class="beat"><div class="bt">On the indicator, <b>"Link a source"</b> → Survey → <em>this assessment's</em> survey → question.</div></div>
+      <div class="beat"><div class="bt">Pick aggregation (UI pre-suggests by field type; <code>percent_selecting</code> reveals "which options count as yes").</div></div>
+      <div class="beat"><div class="bt"><b>Live preview</b>: the number + <code>n=</code> appears <em>before</em> commit — <span class="mono" style="color:var(--forest)">SAR 412,000 (n=38)</span>.</div></div>
+      <div class="beat"><div class="bt"><b>"Drill"</b> → see the actual responses behind it. Lineage from day one.</div></div>
+      <div class="beat"><div class="bt"><b>"Compute &amp; review"</b> → number lands in this assessment, stamped <code>source = measured</code>, contributing rows snapshotted.</div></div>
+      <div class="beat"><div class="bt">New responses later? The trusted number <b>does not silently move</b> — the indicator badges <em>"Stale: 12 new responses, review again."</em> Manual default; auto-refresh optional.</div></div>
+    </div>
+
+    <div class="grid g2 reveal" style="margin-top:34px">
+      <div class="card">
+        <span class="k">Source-agnostic by design</span>
+        <h3>Interviews &amp; records next</h3>
+        <p>A Link is <span class="mono" style="font-size:13px;color:var(--forest)">source_type (survey · interview · record · api · manual) + selector + aggregation + provenance</span>. An interview later is just <span class="mono" style="font-size:13px;color:var(--forest)">source_type=interview</span>, where the "aggregation" may be an AI-suggested code you validate — same object, same review beat, same drill-back.</p>
+      </div>
+      <div class="card">
+        <span class="k">Authoring entry points &amp; scope</span>
+        <h3>From the indicator, primarily</h3>
+        <p><b style="color:var(--ink)">Primary</b> — "Link a source" on the ToC node: the universal gesture, the only one that works for records / interviews. <b style="color:var(--ink)">Accelerator</b> — from the survey, pre-tag a question at build time. The picker shows only <b style="color:var(--ink)">this program · this edition · this assessment</b>'s surveys. One survey → one edition → one assessment.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5 · OVERVIEW & HEALTH ============ -->
+<section id="overview" class="sec">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">§5 — Navigation &amp; the Program Overview</span>
+      <h2 class="sh">You pick what to enter. No guessed scope, ever.</h2>
+      <p class="sec-intro">Clicking a program opens a <strong>Program Overview</strong> — a new page listing the program's Editions (grouped by year), each Edition's Assessments (Pre/Post × group), with status and history.</p>
+    </div>
+    <div class="grid g2 reveal">
+      <div class="card">
+        <span class="k">The landing</span>
+        <h3>Program Overview</h3>
+        <p>You enter the working ToC view only after choosing an edition + assessment; the always-on breadcrumb + scope bar carries it from there. Old <span class="mono" style="font-size:13px;color:var(--forest)">?program=</span> links land here safely. The Overview is also the future home of the Phase-2 year-over-year comparison — the "history" is already its spine.</p>
+      </div>
+      <div class="card">
+        <span class="k">Health score — formula</span>
+        <h3>Per-assessment target attainment</h3>
+        <p>For each indicator with a target — higher-is-better <span class="mono" style="font-size:13px">min(actual÷target,1)×100</span>, lower-is-better <span class="mono" style="font-size:13px">min(target÷actual,1)×100</span>, no value yet <span class="mono" style="font-size:13px">0%</span> — then <b>Overall = average of those</b>, capped 100. No targets → <span class="mono" style="font-size:13px">null</span>.</p>
+        <div class="tiers">
+          <div class="tier g"><span class="dot"></span><span class="lab">Green</span><div class="rng">≥ 70</div></div>
+          <div class="tier a"><span class="dot"></span><span class="lab">Amber</span><div class="rng">40 – 69</div></div>
+          <div class="tier r"><span class="dot"></span><span class="lab">Red</span><div class="rng">&lt; 40</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="callout green reveal">The representative number on list cards = the <strong>latest edition's Post score, always scope-labeled</strong> — showing "in progress / —" when that assessment has no recorded values (never a misleading 0). Falls back to the most recent assessment if the latest edition has no Post. <strong>No averaging across assessments — ever.</strong></div>
+    <div class="reveal"><span class="repnum"><span class="scope">2025 · Post</span><span class="val">76</span></span></div>
+  </div>
+</section>
+
+<!-- ============ 6 · COMPARISON ============ -->
+<section id="comparison" class="sec">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">§6 — Comparison · Phase 2</span>
+      <h2 class="sh">A creation-time wizard, not analytics.</h2>
+      <p class="sec-intro">When you build a <strong>new</strong> assessment / edition, you <strong>clone an existing ToC</strong> rather than start blank.</p>
+    </div>
+    <div class="grid g3 reveal">
+      <div class="card"><span class="k">Auto-match</span><h3>What carried over</h3><p>The wizard auto-matches everything that carried via lineage, and asks you to resolve only the <b>dropped / added diff</b>.</p></div>
+      <div class="card"><span class="k">Carry forward</span><h3>Last year's numbers</h3><p>Optionally pulls last year's numbers forward — stamped <span class="mono" style="font-size:12px;color:var(--clay)">carried_from_prior_edition</span>, never masquerading as a fresh measurement.</p></div>
+      <div class="card"><span class="k">One tool, two jobs</span><h3>Pre→Post &amp; year→year</h3><p>Within an edition, and across editions — always along a single <b>group</b> thread. It is <b>not</b> the analytics / benchmarks section.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7 · REMOVALS ============ -->
+<section id="removals" class="sec">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">§7 — Removals</span>
+      <h2 class="sh">The simplification: two concepts, gone.</h2>
+      <p class="sec-intro">Both added confusion without truth. Removing them makes the <strong>Organization the top of the hierarchy</strong> and collapses fieldwork to one honest question.</p>
+    </div>
+    <div class="grid g2 reveal">
+      <div class="rm">
+        <div class="x"><span class="mk">✕</span>Partners</div>
+        <p>The implementing partner was a <strong>logistical relay</strong> — "who forwards the survey link" — not part of the impact story. What we measure is the <strong>end beneficiary</strong>.</p>
+        <div class="out">
+          <code>implementing_partners</code><code>PartnerManagement</code><code>PartnerFollowUp</code><code>partner_fieldwork_status</code>
+        </div>
+        <div class="keep"><b>→</b> Fieldwork collapses to "of the beneficiaries we're assessing, who responded?"</div>
+      </div>
+      <div class="rm">
+        <div class="x"><span class="mk">✕</span>Funder / Grants</div>
+        <p>No funder entity, no funded-programs relationship, no Grants module. <strong>Organization is the top of the hierarchy.</strong></p>
+        <div class="out">
+          <code>program_funding</code><code>FundedProgramCard</code><code>FundedProgramList</code><code>FundedProgramComparison</code>
+        </div>
+        <div class="keep"><b>→</b> A bare <b>budget</b> stays on the program / edition <em>solely</em> to compute Cost-per-Impact — a cost number, not a funder.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 8 · MIGRATION ============ -->
+<section id="migration" class="sec">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">§8 — Migration</span>
+      <h2 class="sh">Guided manual labeling — no auto-backfill.</h2>
+      <p class="sec-intro">Existing records aren't uniform, so we don't machine-stamp them. One primitive does the work.</p>
+    </div>
+    <div class="callout reveal">For each existing record, a human assigns it to a <strong>(Program, Edition, Assessment)</strong> slot. Covers <strong>label</strong> (new program), <strong>merge</strong> (two records → one program, different editions/assessments), and <strong>split</strong>.</div>
+    <div class="grid g3 reveal" style="margin-top:30px">
+      <div class="card"><span class="k">Scale</span><h3>Low-risk</h3><p>Of 20 active programs, only <b>4 hold any values</b>; 16 are hollow structure.</p></div>
+      <div class="card"><span class="k">Lineage</span><h3>Fresh keys</h3><p>Each existing node/indicator gets a <b>fresh unique lineage key</b> — no auto cross-matching (it would manufacture false matches). Historical matches are made on demand via the Phase-2 wizard.</p></div>
+      <div class="card"><span class="k">Cleanup</span><h3>Dropped</h3><p>Partner &amp; funder data is dropped as part of migration.</p></div>
+    </div>
+
+    <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin:50px 0 6px" class="reveal">Worked example — <span class="ar" lang="ar">الاستدامة المالية</span></h3>
+    <p class="body reveal" style="margin-top:6px">Two records fold into one Program: <span class="ar" lang="ar">…٢٠٢٥ بعدي</span> → <b style="color:var(--ink)">Edition 2025 → Post</b>; <span class="ar" lang="ar">…للمؤسسات</span> → <b style="color:var(--ink)">Edition 2026 → Pre</b>. A retrospective pre+post is supported: an Edition is a labeled run that can be in the past; Assessments are added whenever contracted.</p>
+
+    <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin:42px 0 0" class="reveal">bin Mahfouz 2026 engagement, decoded <span style="color:var(--ink-faint);font-weight:400;font-size:17px">(192,000 SAR)</span></h3>
+    <div class="tbl-wrap reveal">
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th style="width:46%">Program</th><th>2026 assessments</th></tr></thead>
+        <tbody>
+          <tr><td><span class="ar" lang="ar">مهارات المستقبل</span> &nbsp;<span style="color:var(--ink-faint)">Future Skills</span></td><td><span class="chip-s pre">Pre</span> <span style="color:var(--ink-faint)">(interview)</span> &nbsp;+&nbsp; <span class="chip-s post">Post</span> <span style="color:var(--ink-faint)">(Students group, own ToC)</span></td></tr>
+          <tr><td><span class="ar" lang="ar">التطوع</span> &nbsp;<span style="color:var(--ink-faint)">Volunteering</span></td><td><span class="chip-s pre">Pre</span> <span class="chip-s only">only</span></td></tr>
+          <tr><td><span class="ar" lang="ar">الاستدامة المالية</span> &nbsp;<span style="color:var(--ink-faint)">Financial Sustainability</span></td><td><span class="chip-s pre">Pre</span> +  <span class="chip-s post">Post</span> <span style="color:var(--ink-faint)">(post on cohort already pre-measured)</span></td></tr>
+          <tr><td><span class="ar" lang="ar">التمكين الاقتصادي – التوظيف</span> &nbsp;<span style="color:var(--ink-faint)">Economic Empowerment · Employment</span></td><td><span class="chip-s pre">Pre</span> +  <span class="chip-s post">Post</span></td></tr>
+          <tr><td><span class="ar" lang="ar">التمكين الاقتصادي – مشاريع</span> &nbsp;<span style="color:var(--ink-faint)">Economic Empowerment · Projects</span></td><td><span class="chip-s post">Post</span> <span class="chip-s only">only</span></td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+    <div class="callout green reveal">Every shape — pre-only, post-only, both, retrospective, multi-group — is in one real contract.</div>
+  </div>
+</section>
+
+<!-- ============ 9 · DECISIONS ============ -->
+<section id="decisions" class="sec">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">§9 — Decisions resolved</span>
+      <h2 class="sh">The ledger — ten decisions, all closed.</h2>
+      <p class="sec-intro">Every open question from v1 is now resolved. This is the v1 spec.</p>
+    </div>
+    <div class="tbl-wrap reveal ledger">
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th style="width:48px">#</th><th>Decision</th></tr></thead>
+        <tbody>
+          <tr><td><span class="num">1</span></td><td><b>Landing</b> = a Program Overview listing editions + history; user picks edition+assessment. No guessed scope.</td></tr>
+          <tr><td><span class="num">2</span></td><td><b>Health score</b> = per-assessment target-attainment average; list representative = latest Post, scope-labeled, never averaged, "—" when no data.</td></tr>
+          <tr><td><span class="num">3</span></td><td><span class="code-cell">measurement_periods</span> retired; Edition is the time unit; migrate <span class="code-cell">period_id</span> FKs to edition/assessment.</td></tr>
+          <tr><td><span class="num">4</span></td><td><span class="code-cell">impact_snapshots</span> kept, re-scoped to Assessment; purpose = within-assessment progress; editions = cross-period history.</td></tr>
+          <tr><td><span class="num">5</span></td><td><b>Partners removed</b> from model, data, and UI.</td></tr>
+          <tr><td><span class="num">6</span></td><td><b>Funder/Grants removed</b>; Organization is the top; bare <span class="code-cell">budget</span> kept for CPI.</td></tr>
+          <tr><td><span class="num">7</span></td><td><b>Group</b> = program-scoped controlled list; the comparison thread.</td></tr>
+          <tr><td><span class="num">8</span></td><td><b>Composite indicators deferred</b>; v1 = one indicator ← one binding (+ ratio, + custom_formula).</td></tr>
+          <tr><td><span class="num">9</span></td><td><b>Legacy lineage</b> = fresh keys at migration; historical matches made on demand via the wizard.</td></tr>
+          <tr><td><span class="num">10</span></td><td><b>Edition = a run/cohort</b>; year is the default label; multiple editions per year allowed.</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 10 · PHASING ============ -->
+<section id="phasing" class="sec">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">§10 — Scope &amp; phasing</span>
+      <h2 class="sh">Core first, comparison second, connectors later.</h2>
+    </div>
+    <div class="grid g3 reveal" style="align-items:start">
+      <div class="phase p1">
+        <div class="ph-h"><h3>Core</h3><span class="pill-ph">Phase 1</span></div>
+        <ul>
+          <li><strong>editions</strong> + <strong>assessments</strong> tables; ToC re-scoped to Assessment; Program Overview page; shared scope-bar + breadcrumb.</li>
+          <li>Create flows: program → auto Edition + Post assessment + empty ToC; "New Edition" (blank or clone); "Add Assessment".</li>
+          <li>Clone-forward + <strong>lineage_id</strong> stamping.</li>
+          <li><strong>The Link</strong> for the survey source — binding, 8 aggregations + custom, Compute &amp; review, provenance, drill-back, stale badge.</li>
+          <li>Per-assessment health score; impact_snapshots re-scoped.</li>
+          <li>Remove Partners; remove Funder/Grants (keep bare budget).</li>
+          <li>Migration tool: (Program, Edition, Assessment) assignment incl. merge/split.</li>
+          <li>Edge-function re-scope; silent-read fixes; routing resolves to the Overview.</li>
+        </ul>
+      </div>
+      <div class="phase p2">
+        <div class="ph-h"><h3>Comparison</h3><span class="pill-ph">Phase 2</span></div>
+        <ul>
+          <li>The clone-and-match wizard — <strong>auto-match + diff + carry-forward</strong>.</li>
+          <li>Year-over-year on the Program Overview.</li>
+        </ul>
+      </div>
+      <div class="phase pf">
+        <div class="ph-h"><h3>Later</h3><span class="pill-ph">Future</span></div>
+        <ul>
+          <li>Interview / record / API connectors on the same <strong>Link spine</strong>.</li>
+          <li>Multi-question <strong>index / scale builder</strong>.</li>
+          <li>Snapshot automation.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 11 · SUCCESS ============ -->
+<section id="success" class="sec">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">§12 — Success criterion</span>
+      <h2 class="sh">The path that does not exist today.</h2>
+      <p class="sec-intro">One consultant, one program, end to end. This PRD is the path.</p>
+    </div>
+    <div class="path reveal">
+      <div class="step"><div class="ico">1</div><div class="st">Clicks <b><span class="ar" lang="ar">الاستدامة المالية</span></b> → the Program Overview lists <b>2025 (Post)</b> and <b>2026 (Pre)</b>.</div></div>
+      <div class="step"><div class="ico">2</div><div class="st">Opens <b>2025 › Post</b> → clicks an indicator → links <b>Q7</b> of the post survey.</div></div>
+      <div class="step"><div class="ico">3</div><div class="st">Picks <span class="mono">average</span> → sees <span class="mono" style="color:var(--forest)">SAR 412,000 (n=38)</span> → drills to the responses.</div></div>
+      <div class="step"><div class="ico">4</div><div class="st">Clicks <b>Compute</b>, and the number lands with provenance.</div></div>
+      <div class="step"><div class="ico">5</div><div class="st">Next year they clone 2025 into 2026, and the wizard offers to <b>carry last year's numbers forward.</b></div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap reveal">
+    <p class="fin">That entire path does not exist today. <em>This PRD is the path.</em></p>
+    <div class="credit">
+      <span>Atharnami · Programs PRD v2</span><span class="sep"></span>
+      <span>Owner: Baraa (Qararat)</span><span class="sep"></span>
+      <span>For review by: Anas</span><span class="sep"></span>
+      <span>Status: Draft for approval</span><span class="sep"></span>
+      <span>2026-06-30</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// progress bar
+const prog=document.getElementById('progress');
+const onScroll=()=>{
+  const h=document.documentElement;
+  const pct=(h.scrollTop)/(h.scrollHeight-h.clientHeight)*100;
+  prog.style.width=pct+'%';
+};
+document.addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+// reveal on scroll
+const io=new IntersectionObserver((es)=>{
+  es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
+},{rootMargin:'0px 0px -10% 0px',threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+// scroll-spy
+const secs=[...document.querySelectorAll('section[id]')];
+const links=new Map([...document.querySelectorAll('#navlinks a')].map(a=>[a.getAttribute('href').slice(1),a]));
+const spy=new IntersectionObserver((es)=>{
+  es.forEach(e=>{
+    if(e.isIntersecting){
+      links.forEach(a=>a.classList.remove('active'));
+      const a=links.get(e.target.id);if(a){a.classList.add('active');
+        a.scrollIntoView({inline:'center',block:'nearest'});}
+    }
+  });
+},{rootMargin:'-45% 0px -50% 0px'});
+secs.forEach(s=>spy.observe(s));
+</script>
+</body>
+</html>
