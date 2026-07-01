@@ -318,14 +318,14 @@ footer .credit .sep{width:4px;height:4px;border-radius:50%;background:var(--line
 <!-- ============ HERO ============ -->
 <header class="hero">
   <div class="wrap stagger">
-    <div class="eyebrow"><span class="rule"></span>Product Requirements · v2 · Draft for approval</div>
+    <div class="eyebrow"><span class="rule"></span>Product Requirements · v3 · Draft for approval</div>
     <h1 class="title">Programs that <em>repeat</em>, measured <em>per&nbsp;run</em>.</h1>
     <p class="subtitle">Editions, Assessments &amp; the Input&nbsp;→&nbsp;Indicator Link.</p>
     <p class="lede">Atharnami's core unit today is a single flat <strong>Program</strong> with a single flat <strong>Theory of Change</strong> — and it breaks the moment reality arrives. This PRD introduces a clean hierarchy — <strong>Organization → Program → Edition → Assessment</strong> — where the Assessment owns the ToC, plus a source-agnostic <strong>Link</strong> that turns a survey question into a reviewed indicator value with full provenance. Along the way it removes two concepts that added confusion without truth.</p>
     <div class="meta-row">
       <span class="tag accent">For review by&nbsp; <b>Anas</b></span>
       <span class="tag">Owner&nbsp; <b>Baraa · Qararat</b></span>
-      <span class="tag">Drafted &amp; revised&nbsp; <b>2026-06-30</b></span>
+      <span class="tag">Drafted&nbsp; <b>2026-06-30</b> · Revised&nbsp; <b>2026-07-01</b></span>
       <span class="tag">Author&nbsp; <b>Nami</b></span>
     </div>
   </div>
@@ -347,9 +347,9 @@ footer .credit .sep{width:4px;height:4px;border-radius:50%;background:var(--line
         <p>Organization → Program → Edition (a run / cohort) → Assessment (Pre/Post × group). The Assessment owns its ToC, survey, values and snapshots.</p>
       </div>
       <div class="card">
-        <span class="k">The heart</span>
-        <h3>An indicator's number is a sentence</h3>
-        <p>A source-agnostic Link: <span class="mono" style="font-size:13px;color:var(--forest)">source → selector → aggregation → reviewed number</span>, with live preview, drill-back and provenance.</p>
+        <span class="k">Getting the number in</span>
+        <h3>Type it — or Link it for outcomes</h3>
+        <p>Manual entry is the <strong>baseline</strong> for any indicator: inputs, activities, outputs are admin numbers you type. The source-agnostic <strong>Link</strong> is the richer path for outcomes — <span class="mono" style="font-size:13px;color:var(--forest)">source → selector → aggregation → reviewed number</span>.</p>
       </div>
       <div class="card">
         <span class="k">The subtraction</span>
@@ -404,7 +404,10 @@ footer .credit .sep{width:4px;height:4px;border-radius:50%;background:var(--line
       <div class="connector" style="--d:3"></div>
       <div class="lvl" style="--d:4"><div class="node"><span class="badge">indicator</span><span class="nm">Indicator</span><span class="desc">a measured outcome on the ToC</span></div></div>
       <div class="leaf-row">
-        <span class="chip ind">Indicator</span><span class="arr">←</span><span class="chip link">Link</span><span class="arr">←</span><span class="chip">survey question + aggregation</span><span class="arr">→</span><span class="chip val">Value <span style="color:var(--ink-faint)">(+ provenance)</span></span>
+        <span class="chip ind">Indicator</span><span class="arr">→</span><span class="chip val">Value <span style="color:var(--ink-faint)">(+ provenance)</span></span>
+      </div>
+      <div class="leaf-row" style="margin-top:8px">
+        <span style="color:var(--ink-faint);font-family:'IBM Plex Mono',monospace">default:</span><span class="chip val">manual number</span><span style="color:var(--ink-faint)">·&nbsp; or</span><span class="arr">←</span><span class="chip link">Link</span><span class="arr">←</span><span class="chip">survey question + aggregation</span>
       </div>
     </div>
 
@@ -422,7 +425,7 @@ footer .credit .sep{width:4px;height:4px;border-radius:50%;background:var(--line
           <tr><td><span class="term">Group</span></td><td>The respondent population being measured (e.g. Students, Partners-as-respondents, Institutions). Chosen from a <b>program-scoped controlled list</b>. The thread comparison runs along.</td><td class="not">Free text</td></tr>
           <tr><td><span class="term">Link</span></td><td>A source-agnostic binding that produces one indicator value: <span class="code-cell">source → selector → aggregation → reviewed number</span>.</td><td class="not">A "survey link" — it generalizes to interviews, records, APIs</td></tr>
           <tr><td><span class="term">Lineage key</span></td><td>A stable id on a node/indicator carried across clones, so the same indicator can be matched across editions / assessments.</td><td class="not">A version number</td></tr>
-          <tr><td><span class="term">Provenance</span></td><td>Where a value came from: <span class="code-cell">measured · client_provided · carried_from_prior_edition · manual</span>.</td><td class="not">A correctness flag</td></tr>
+          <tr><td><span class="term">Provenance</span></td><td>Where a value came from: <span class="code-cell">measured · client_provided · carried_from_prior_edition · manual</span>. <b>Manual entry is the baseline</b> (client-supplied admin numbers); <span class="code-cell">measured</span> is stamped only when a Link computes the value.</td><td class="not">A correctness flag</td></tr>
           <tr><td><span class="term">Snapshot</span></td><td>A point-in-time freeze of an <b>assessment's</b> live values <b>during collection</b> — the progress curve.</td><td class="not">The cross-period history — that's Editions</td></tr>
         </tbody>
       </table>
@@ -460,10 +463,29 @@ footer .credit .sep{width:4px;height:4px;border-radius:50%;background:var(--line
 <section id="link" class="sec">
   <div class="wrap">
     <div class="sec-head reveal">
-      <span class="sec-num">§4 — The Input→Indicator Link</span>
-      <h2 class="sh">The heart: an indicator's number is a <em style="font-style:italic;color:var(--clay)">sentence</em>.</h2>
-      <p class="sec-intro">The consultant never "writes a metric." They <strong>point at a question and choose how to count it.</strong> Each clause is an editable pill.</p>
+      <span class="sec-num">§4 — Getting a number into an indicator</span>
+      <h2 class="sh">Type it in — or, for outcomes, <em style="font-style:italic;color:var(--clay)">Link</em> a source.</h2>
+      <p class="sec-intro">Two entry modes. <strong>Manual is the baseline</strong>: inputs, activities and outputs are administrative records the client hands over — you just type the number. The <strong>survey Link</strong> is the richer path for the <strong>outcomes / results</strong> that must be computed from what respondents said. When the number lives in survey responses they point at a question; when it's an administrative fact they just write it.</p>
     </div>
+
+    <!-- where each mode fits -->
+    <div class="tbl-wrap reveal">
+      <div class="tbl-scroll">
+      <table>
+        <caption>Where each mode fits — the level predicts the source</caption>
+        <thead><tr><th style="width:40%">ToC level</th><th style="width:36%">Typical source</th><th>Default entry mode</th></tr></thead>
+        <tbody>
+          <tr><td><b>Inputs / Activities / Outputs</b> &nbsp;<span class="ar" lang="ar">المدخلات / الأنشطة / المخرجات</span></td><td>Administrative records from the client — budgets, attendance, # sessions / workshops</td><td><span class="code-cell">Manual</span> number</td></tr>
+          <tr><td><b>Outcomes / Results</b> &nbsp;<span class="ar" lang="ar">مؤشرات النتائج</span></td><td>Mostly survey-measured change</td><td><span class="code-cell" style="color:var(--clay);background:rgba(178,91,54,.08)">Survey Link</span></td></tr>
+          <tr><td>An outcome that's <b>written, not surveyed</b></td><td>Client estimate, expert judgment, or records</td><td><span class="code-cell">Manual</span> <span style="color:var(--ink-faint)">(Link optional)</span></td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+    <div class="callout reveal">The level <strong>predicts</strong> the typical source — it doesn't dictate it. What decides the mode is the <strong>nature of the data</strong>: an outcome can come straight from records (e.g. # job placements), and a rare output could be surveyed. <em>Follow the data, not the row.</em></div>
+
+    <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin:54px 0 4px" class="reveal">The survey case: an indicator's number is a <em style="font-style:italic;color:var(--clay);font-weight:600">sentence</em></h3>
+    <p class="body reveal" style="margin-top:8px">For outcomes drawn from responses, the consultant doesn't hand-write a metric — they <strong>point at a question and choose how to count it.</strong> Each clause is an editable pill. <span style="color:var(--ink-faint)">The manual path, by contrast, is one field — no pills, no aggregation.</span></p>
 
     <div class="sentence reveal">
       <div class="lbl">Mental model — read it left to right</div>
@@ -505,6 +527,7 @@ footer .credit .sep{width:4px;height:4px;border-radius:50%;background:var(--line
 
     <!-- compute & review beat -->
     <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin:54px 0 0" class="reveal">The "Compute &amp; review" beat — why it's trusted</h3>
+    <p class="body reveal" style="margin-top:8px">This beat is the <strong>survey / Link</strong> path. The manual path is one field: type the number → it lands stamped <span class="mono" style="font-size:13px;color:var(--forest)">client_provided</span> / <span class="mono" style="font-size:13px;color:var(--forest)">manual</span>, no aggregation, no stale badge.</p>
     <div class="beats reveal">
       <div class="beat"><div class="bt">On the indicator, <b>"Link a source"</b> → Survey → <em>this assessment's</em> survey → question.</div></div>
       <div class="beat"><div class="bt">Pick aggregation (UI pre-suggests by field type; <code>percent_selecting</code> reveals "which options count as yes").</div></div>
@@ -522,8 +545,8 @@ footer .credit .sep{width:4px;height:4px;border-radius:50%;background:var(--line
       </div>
       <div class="card">
         <span class="k">Authoring entry points &amp; scope</span>
-        <h3>From the indicator, primarily</h3>
-        <p><b style="color:var(--ink)">Primary</b> — "Link a source" on the ToC node: the universal gesture, the only one that works for records / interviews. <b style="color:var(--ink)">Accelerator</b> — from the survey, pre-tag a question at build time. The picker shows only <b style="color:var(--ink)">this program · this edition · this assessment</b>'s surveys. One survey → one edition → one assessment.</p>
+        <h3>Type the number by default</h3>
+        <p><b style="color:var(--ink)">Default — type the number</b> on the node: provenance <span class="mono" style="font-size:12px;color:var(--forest)">client_provided</span> / <span class="mono" style="font-size:12px;color:var(--forest)">manual</span>. The whole story for inputs / activities / outputs and any written outcome. <b style="color:var(--ink)">Outcome path — "Link a source"</b> on the ToC node: the survey gesture (and the only one that later works for records / interviews). <b style="color:var(--ink)">Accelerator</b> — pre-tag a question from the survey at build time. The picker shows only <b style="color:var(--ink)">this program · this edition · this assessment</b>'s surveys. One survey → one edition → one assessment.</p>
       </div>
     </div>
   </div>
@@ -685,7 +708,8 @@ footer .credit .sep{width:4px;height:4px;border-radius:50%;background:var(--line
           <li><strong>editions</strong> + <strong>assessments</strong> tables; ToC re-scoped to Assessment; Program Overview page; shared scope-bar + breadcrumb.</li>
           <li>Create flows: program → auto Edition + Post assessment + empty ToC; "New Edition" (blank or clone); "Add Assessment".</li>
           <li>Clone-forward + <strong>lineage_id</strong> stamping.</li>
-          <li><strong>The Link</strong> for the survey source — binding, 8 aggregations + custom, Compute &amp; review, provenance, drill-back, stale badge.</li>
+          <li><strong>Manual number entry</strong> — the default path for any indicator (and the whole story for inputs / activities / outputs); type the value → <span class="mono" style="font-size:12px;color:var(--forest)">client_provided</span> / <span class="mono" style="font-size:12px;color:var(--forest)">manual</span> provenance, no binding.</li>
+          <li><strong>The Link</strong> for the survey source — the outcome / results path; binding, 8 aggregations + custom, Compute &amp; review, provenance, drill-back, stale badge.</li>
           <li>Per-assessment health score; impact_snapshots re-scoped.</li>
           <li>Remove Partners; remove Funder/Grants (keep bare budget).</li>
           <li>Migration tool: (Program, Edition, Assessment) assignment incl. merge/split.</li>
@@ -721,10 +745,11 @@ footer .credit .sep{width:4px;height:4px;border-radius:50%;background:var(--line
     </div>
     <div class="path reveal">
       <div class="step"><div class="ico">1</div><div class="st">Clicks <b><span class="ar" lang="ar">الاستدامة المالية</span></b> → the Program Overview lists <b>2025 (Post)</b> and <b>2026 (Pre)</b>.</div></div>
-      <div class="step"><div class="ico">2</div><div class="st">Opens <b>2025 › Post</b> → clicks an indicator → links <b>Q7</b> of the post survey.</div></div>
-      <div class="step"><div class="ico">3</div><div class="st">Picks <span class="mono">average</span> → sees <span class="mono" style="color:var(--forest)">SAR 412,000 (n=38)</span> → drills to the responses.</div></div>
-      <div class="step"><div class="ico">4</div><div class="st">Clicks <b>Compute</b>, and the number lands with provenance.</div></div>
-      <div class="step"><div class="ico">5</div><div class="st">Next year they clone 2025 into 2026, and the wizard offers to <b>carry last year's numbers forward.</b></div></div>
+      <div class="step"><div class="ico">2</div><div class="st">Opens <b>2025 › Post</b> → on an output indicator, <b>types the number the client handed over</b> — <span class="mono" style="color:var(--forest)">12 workshops delivered</span> — provenance <span class="mono">client_provided</span>, no aggregation, no survey.</div></div>
+      <div class="step"><div class="ico">3</div><div class="st">For an <b>outcome</b> indicator, clicks it → links <b>Q7</b> of the post survey.</div></div>
+      <div class="step"><div class="ico">4</div><div class="st">Picks <span class="mono">average</span> → sees <span class="mono" style="color:var(--forest)">SAR 412,000 (n=38)</span> → drills to the responses.</div></div>
+      <div class="step"><div class="ico">5</div><div class="st">Clicks <b>Compute</b>, and the number lands with provenance.</div></div>
+      <div class="step"><div class="ico">6</div><div class="st">Next year they clone 2025 into 2026, and the wizard offers to <b>carry last year's numbers forward.</b></div></div>
     </div>
   </div>
 </section>
@@ -733,11 +758,11 @@ footer .credit .sep{width:4px;height:4px;border-radius:50%;background:var(--line
   <div class="wrap reveal">
     <p class="fin">That entire path does not exist today. <em>This PRD is the path.</em></p>
     <div class="credit">
-      <span>Atharnami · Programs PRD v2</span><span class="sep"></span>
+      <span>Atharnami · Programs PRD v3</span><span class="sep"></span>
       <span>Owner: Baraa (Qararat)</span><span class="sep"></span>
       <span>For review by: Anas</span><span class="sep"></span>
       <span>Status: Draft for approval</span><span class="sep"></span>
-      <span>2026-06-30</span>
+      <span>Drafted 2026-06-30 · Revised 2026-07-01</span>
     </div>
   </div>
 </footer>
