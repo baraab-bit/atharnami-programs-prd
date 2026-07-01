@@ -408,6 +408,7 @@ td .route{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--ink
       <a class="nlink" href="#advance">Auto-advance</a>
       <a class="nlink" href="#baseline">Baseline</a>
       <a class="nlink" href="#subject">Subject &amp; Tools</a>
+      <a class="nlink" href="#onboarding">Roster Onboarding</a>
       <a class="nlink" href="#sidebar">Sidebar</a>
       <a class="nlink" href="#decisions">Decisions</a>
       <a class="nlink" href="#phasing">Phasing</a>
@@ -892,6 +893,87 @@ td .route{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--ink
   </div>
 </section>
 
+<!-- ============ 7.5 · ROSTER ONBOARDING ============ -->
+<section id="onboarding" class="sec">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">§8 — Roster onboarding</span>
+      <h2 class="sh">How the list becomes a <em style="color:var(--clay)">chase</em>.</h2>
+      <p class="sec-intro">The base PRD says the Roster is "imported" but never says <em>where</em>. Here is where: <strong>onto the Assessment itself.</strong> The empty assessment shows <strong>"No Roster yet — import the list"</strong>; import fills it; the denominator exists; the chase board lights up.</p>
+    </div>
+
+    <div class="callout reveal">The list the org sends <strong>plugs in nowhere global</strong> — it lands straight onto <strong>one Assessment as its Roster</strong>. Scope is fixed to <strong>Program › Edition › Assessment</strong> from the first second, so a list can never become an orphan.</div>
+
+    <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin:54px 0 0" class="reveal">The 4-step Import Roster flow</h3>
+    <div class="tbl-wrap reveal">
+      <div class="tbl-scroll">
+      <table>
+        <caption>§8a — the empty assessment → a live Roster</caption>
+        <thead><tr><th style="width:52px">Step</th><th style="width:36%">Abdu does</th><th>Platform does</th></tr></thead>
+        <tbody>
+          <tr><td class="mono-cell">1</td><td>Opens Program › Edition › <span class="chip-s pre">Pre</span> — the empty assessment shows <b>"No Roster yet — import the list"</b></td><td>Scope already fixed to <em>this</em> Assessment</td></tr>
+          <tr><td class="mono-cell">2</td><td>Uploads the spreadsheet the org sent</td><td>Column-mapping: <b>Name · Phone · Parent Contact · (optional) represents-org</b> → Subject fields</td></tr>
+          <tr><td class="mono-cell">3</td><td>Reviews matches</td><td>Each row → a <b>Beneficiary</b> (stable identity); existing people <b>MATCH, not duplicate</b> <span class="code-cell">MatchReviewScreen</span></td></tr>
+          <tr><td class="mono-cell">4</td><td>Commits</td><td>Rows become the <b>Roster</b> (Subjects scoped to <span class="code-cell">assessment_id</span>); denominator exists; chase board lights up; each Subject carries the <span class="code-cell">beneficiary_id</span> the personalized Typeform link uses — how responses later map to Respondent / Non-respondent</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+    <div class="grid g2 reveal" style="margin-top:20px">
+      <div class="card">
+        <span class="k">The whole minimum</span>
+        <h3>Name + Phone</h3>
+        <p>That's the entire minimum a list needs to become a Roster. Everything else is optional enrichment.</p>
+      </div>
+      <div class="card role-op">
+        <span class="k">The org-Subject variant</span>
+        <h3>Same import, one column</h3>
+        <p>bin Mahfouz <span class="ar" lang="ar">الاستدامة المالية</span> = <b>4 rows</b>, each <em>"representative name · phone · represents Org X"</em> — the person is the doorway, the org is the unit of analysis.</p>
+      </div>
+    </div>
+
+    <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin:54px 0 0" class="reveal">Post clones the Pre Roster forward — with reconciliation</h3>
+    <p class="body reveal"><strong>Pre is a fresh import; Post clones the Pre Roster forward by default</strong> — same Subjects, new assessment, carried identity — so matched Pre→Post pairs come for free. Fully editable.</p>
+    <div class="tbl-wrap reveal">
+      <div class="tbl-scroll">
+      <table>
+        <caption>§8b — three cases, one MatchReviewScreen</caption>
+        <thead><tr><th style="width:30%">Case</th><th>What happens</th></tr></thead>
+        <tbody>
+          <tr><td><span class="chip-s pre">Pre</span></td><td><b>Fresh import</b> (the 4-step flow above).</td></tr>
+          <tr><td><span class="chip-s post">Post — default</span></td><td><b>Clone the Pre Roster forward:</b> same Subjects, new <span class="code-cell">assessment_id</span>, carried <span class="code-cell">beneficiary_id</span> → Pre→Post pairs match automatically. <b>Fully editable.</b></td></tr>
+          <tr><td><span class="chip-s post">Post — new list</span></td><td>Org sends a genuinely new list; Abdu imports it; the platform <b>matches it against the cloned Roster and shows the overlap</b> (<em>"matched 12 of 50"</em>). Same <span class="code-cell">MatchReviewScreen</span>, double duty.</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+    <div class="mock-cap reveal"><span class="badge-mk">Reconcile</span> Partial overlap (20–50%) is explicit, never hidden</div>
+    <div class="repnum reveal"><span class="scope">Cloned Roster reconciliation</span><span class="val">matched 12 of 50</span></div>
+    <div class="states reveal">
+      <div class="state sched">
+        <div class="sh-row"><span class="chip-s st-g">Matched · 12</span></div>
+        <div class="sname">Carry forward</div>
+        <p>Matched people carry Pre identity forward → their Pre &amp; Post answers <b>pair</b> automatically.</p>
+      </div>
+      <div class="state breach">
+        <div class="sh-row"><span class="chip-s st-r">Unmatched Pre · 38</span></div>
+        <div class="sname">Dropped / attrition</div>
+        <p>Pre people absent from the new list surface as <b>attrition</b> — visible, never silently lost.</p>
+      </div>
+      <div class="state risk">
+        <div class="sh-row"><span class="chip-s st-a">New · added</span></div>
+        <div class="sname">Added to the Roster</div>
+        <p>People in the new list with no Pre match are <b>added</b> as fresh Subjects on the Post assessment.</p>
+      </div>
+    </div>
+
+    <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin:54px 0 0" class="reveal">Parent Contact — <span class="ar" lang="ar">الجهة الأم</span></h3>
+    <p class="body reveal">Sometimes the org's list says <em>"here are the 50 people — to reach them, go through this body that ran the program for them."</em> That body is <strong>one reference column</strong> on the Roster, carrying a <strong>name (+ optional phone)</strong>. It is a <strong>field on the Subject, not a modeled entity</strong>: no management page, no follow-up, no RAG, no lifecycle. Import fills it; often <strong>all rows share one value</strong>.</p>
+    <div class="callout green reveal">Documented honestly: <span class="ar" lang="ar">الجهة الأم</span> is <strong>a deliberate lightweight trace of the removed Partner — a reference column, not a re-introduction.</strong> "Organization" is already taken twice (the client + org-as-unit-of-analysis) and "Partner" would signal the deleted feature had returned, so <strong>"Parent Contact"</strong> is the deliberately-neutral choice. It is the <em>seed</em> for a possible future group-by / chase-through feature, but stays a plain column for now.</div>
+  </div>
+</section>
+
 <!-- ============ 8 · SIDEBAR DISPOSITION ============ -->
 <section id="sidebar" class="sec">
   <div class="wrap">
@@ -927,7 +1009,7 @@ td .route{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--ink
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="sec-num">§9 — Decisions resolved</span>
-      <h2 class="sh">The ledger — twelve decisions, all closed.</h2>
+      <h2 class="sh">The ledger — fourteen decisions, all closed.</h2>
       <p class="sec-intro">Everything resolved in the grilling session. Genuine gaps are parked in Open Questions, not silently resolved here.</p>
     </div>
     <div class="tbl-wrap reveal ledger">
@@ -947,6 +1029,8 @@ td .route{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--ink
           <tr><td><span class="num">10</span></td><td><b>Baseline is first-class on every Post indicator</b>, with a provenance tag; a Pre card exists only when Pre data is collected.</td></tr>
           <tr><td><span class="num">11</span></td><td><b>Subject is always a person</b>, optionally representing an org (which flips the unit of analysis to org grain).</td></tr>
           <tr><td><span class="num">12</span></td><td><b>survey / interview / records are all "tools"</b>; the instrument routes the board (fill-and-return vs. interview lifecycle).</td></tr>
+          <tr><td><span class="num">13</span></td><td><b>The Roster is imported onto the Assessment</b>; Pre is a fresh import, <b>Post clones the Pre Roster forward</b> and match-reconciles a new list (matched carry forward, unmatched = attrition, new = added).</td></tr>
+          <tr><td><span class="num">14</span></td><td><b>Parent Contact</b> <span class="ar" lang="ar">(الجهة الأم)</span> is a plain reference column on the Subject — a deliberate lightweight trace of the removed Partner, <b>not a re-introduction.</b></td></tr>
         </tbody>
       </table>
       </div>
