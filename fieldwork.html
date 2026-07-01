@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fieldwork PRD — the Chase Board &amp; the 5-Stage Pipeline · Atharnami</title>
+<meta name="description" content="Product requirements: a per-assessment chase board that answers three questions at a glance, and a 5-stage lifecycle pipeline where the Assessment is the card that advances itself." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F6F2EA;
+  --paper-2:#FBF8F2;
+  --card:#FFFFFF;
+  --ink:#1A1A14;
+  --ink-soft:#4B4A40;
+  --ink-faint:#7C7A6C;
+  --line:#E2DBCC;
+  --line-soft:#ECE6D9;
+  --forest:#28584A;
+  --forest-soft:#3E7263;
+  --clay:#B25B36;
+  --clay-soft:#C8784F;
+  --gold:#9C7A1E;
+  --green:#3E7263;
+  --amber:#B07A18;
+  --red:#A8472E;
+  --grey:#8A8676;
+  --shadow:0 1px 2px rgba(26,26,20,.04), 0 8px 28px rgba(26,26,20,.06);
+  --shadow-lg:0 2px 6px rgba(26,26,20,.05), 0 24px 60px rgba(26,26,20,.10);
+  --rad:14px;
+  --maxw:1120px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Hanken Grotesk',system-ui,sans-serif;
+  font-size:17px;line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  mix-blend-mode:multiply;opacity:.6;
+}
+.ar{font-family:'IBM Plex Sans Arabic','Hanken Grotesk',sans-serif;font-weight:500;direction:rtl;unicode-bidi:isolate;display:inline-block;line-height:1;}
+.mono{font-family:'IBM Plex Mono',monospace;}
+a{color:inherit}
+::selection{background:var(--forest);color:var(--paper-2)}
+
+/* ---------- layout ---------- */
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;position:relative;z-index:1}
+section{position:relative;z-index:1}
+.sec{padding:84px 0;border-top:1px solid var(--line-soft)}
+.sec:first-of-type{border-top:none}
+
+/* ---------- top progress + nav ---------- */
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--forest),var(--clay));z-index:60;transition:width .12s linear}
+nav.deck{
+  position:sticky;top:0;z-index:50;
+  background:rgba(246,242,234,.86);
+  backdrop-filter:saturate(140%) blur(12px);
+  -webkit-backdrop-filter:saturate(140%) blur(12px);
+  border-bottom:1px solid var(--line);
+}
+nav.deck .row{max-width:var(--maxw);margin:0 auto;display:flex;align-items:center;gap:18px;padding:11px 28px}
+nav.deck .brand{font-family:'Fraunces',serif;font-weight:600;font-size:16px;letter-spacing:.2px;white-space:nowrap;display:flex;align-items:center;gap:9px}
+nav.deck .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--clay);box-shadow:0 0 0 4px rgba(178,91,54,.14)}
+nav.deck .links{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;margin-left:auto}
+nav.deck .links::-webkit-scrollbar{display:none}
+nav.deck a.nlink{
+  font-size:13px;font-weight:500;color:var(--ink-faint);
+  padding:6px 11px;border-radius:8px;white-space:nowrap;text-decoration:none;
+  transition:color .18s,background .18s;
+}
+nav.deck a.nlink:hover{color:var(--ink);background:rgba(40,88,74,.07)}
+nav.deck a.nlink.active{color:var(--forest);background:rgba(40,88,74,.10)}
+@media(max-width:860px){nav.deck .brand .full{display:none}}
+
+/* ---------- hero ---------- */
+.hero{padding:78px 0 70px;position:relative;overflow:hidden}
+.hero::after{
+  content:"";position:absolute;right:-180px;top:-120px;width:560px;height:560px;border-radius:50%;
+  background:radial-gradient(circle at 30% 30%,rgba(62,114,99,.16),rgba(62,114,99,0) 62%);
+  pointer-events:none;
+}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:9px;font-size:12.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--forest);margin-bottom:26px;
+}
+.eyebrow .rule{width:34px;height:1px;background:var(--forest);opacity:.5}
+h1.title{
+  font-family:'Fraunces',serif;font-weight:600;letter-spacing:-.015em;
+  font-size:clamp(38px,6.2vw,72px);line-height:1.02;margin-bottom:6px;max-width:16ch;
+}
+h1.title em{font-style:italic;color:var(--clay)}
+.subtitle{font-family:'Fraunces',serif;font-style:italic;font-weight:400;font-size:clamp(19px,2.4vw,26px);color:var(--ink-soft);max-width:34ch;margin-top:14px;line-height:1.3}
+.lede{max-width:62ch;margin-top:30px;font-size:18.5px;color:var(--ink-soft);line-height:1.66}
+.lede strong{color:var(--ink);font-weight:600}
+.meta-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:38px}
+.tag{
+  font-size:12.5px;font-weight:600;letter-spacing:.02em;padding:7px 13px;border-radius:999px;
+  background:var(--card);border:1px solid var(--line);color:var(--ink-soft);box-shadow:var(--shadow);
+}
+.tag b{color:var(--ink);font-weight:600}
+.tag.accent{border-color:rgba(40,88,74,.3);color:var(--forest);background:rgba(40,88,74,.05)}
+
+/* anim */
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+.stagger>*{opacity:0;transform:translateY(16px);animation:rise .8s cubic-bezier(.2,.7,.2,1) forwards}
+@keyframes rise{to{opacity:1;transform:none}}
+.stagger>*:nth-child(1){animation-delay:.05s}
+.stagger>*:nth-child(2){animation-delay:.16s}
+.stagger>*:nth-child(3){animation-delay:.27s}
+.stagger>*:nth-child(4){animation-delay:.38s}
+.stagger>*:nth-child(5){animation-delay:.49s}
+.stagger>*:nth-child(6){animation-delay:.60s}
+@media(prefers-reduced-motion:reduce){.reveal,.stagger>*{opacity:1!important;transform:none!important;animation:none!important}}
+
+/* ---------- section headers ---------- */
+.sec-num{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;color:var(--clay);letter-spacing:.05em}
+h2.sh{font-family:'Fraunces',serif;font-weight:600;letter-spacing:-.01em;font-size:clamp(28px,3.8vw,40px);line-height:1.08;margin:10px 0 0}
+.sec-intro{max-width:64ch;margin-top:18px;font-size:18px;color:var(--ink-soft)}
+.sec-intro strong{color:var(--ink);font-weight:600}
+.sec-head{margin-bottom:42px}
+
+/* ---------- generic prose ---------- */
+p.body{max-width:66ch;color:var(--ink-soft);margin-top:16px}
+p.body strong{color:var(--ink);font-weight:600}
+.callout{
+  margin-top:26px;padding:20px 24px;border-left:3px solid var(--clay);
+  background:linear-gradient(90deg,rgba(178,91,54,.06),rgba(178,91,54,0));
+  border-radius:0 var(--rad) var(--rad) 0;font-family:'Fraunces',serif;font-style:italic;font-size:19px;color:var(--ink);max-width:62ch;line-height:1.45;
+}
+.callout.green{border-left-color:var(--forest);background:linear-gradient(90deg,rgba(40,88,74,.06),rgba(40,88,74,0))}
+
+/* ---------- cards / grids ---------- */
+.grid{display:grid;gap:20px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+@media(max-width:820px){.g2,.g3{grid-template-columns:1fr}}
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--rad);
+  padding:24px;box-shadow:var(--shadow);transition:transform .25s,box-shadow .25s,border-color .25s;
+}
+.card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);border-color:var(--line)}
+.card h3{font-family:'Fraunces',serif;font-weight:600;font-size:20px;margin-bottom:6px;letter-spacing:-.01em}
+.card .k{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--clay);font-weight:600;margin-bottom:12px;display:block}
+.card p{color:var(--ink-soft);font-size:15.5px}
+
+/* ---------- tables ---------- */
+.tbl-wrap{margin-top:26px;border:1px solid var(--line);border-radius:var(--rad);overflow:hidden;box-shadow:var(--shadow);background:var(--card)}
+.tbl-scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:15px;min-width:540px}
+caption{caption-side:top;text-align:left;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);padding:16px 20px 0;font-weight:600}
+thead th{
+  text-align:left;font-weight:600;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-faint);
+  padding:14px 18px;background:var(--paper-2);border-bottom:1px solid var(--line);white-space:nowrap;
+}
+tbody td{padding:14px 18px;border-bottom:1px solid var(--line-soft);vertical-align:top;color:var(--ink-soft)}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:rgba(40,88,74,.025)}
+tbody td b,tbody td strong{color:var(--ink);font-weight:600}
+td .term{font-family:'Fraunces',serif;font-weight:600;font-size:16px;color:var(--ink)}
+td.not{color:var(--ink-faint);font-style:italic}
+.code-cell{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--forest);background:rgba(40,88,74,.06);padding:2px 7px;border-radius:6px;white-space:nowrap;font-weight:500}
+
+/* ---------- hierarchy diagram ---------- */
+.hier{margin-top:30px;display:flex;flex-direction:column;gap:0;position:relative}
+.hier .node{
+  position:relative;background:var(--card);border:1px solid var(--line);border-radius:12px;
+  padding:16px 20px;box-shadow:var(--shadow);display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;
+}
+.hier .lvl{margin-left:calc(var(--d,0)*30px);transition:transform .3s}
+.hier .lvl:hover .node{transform:translateX(3px);border-color:rgba(40,88,74,.35)}
+.hier .connector{height:18px;width:2px;background:var(--line);margin-left:calc(var(--d,0)*30px + 24px)}
+.hier .nm{font-family:'Fraunces',serif;font-weight:600;font-size:19px;letter-spacing:-.01em}
+.hier .badge{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:3px 9px;border-radius:999px;background:rgba(40,88,74,.09);color:var(--forest)}
+.hier .desc{color:var(--ink-faint);font-size:14.5px}
+.hier .node.accent{border-color:rgba(178,91,54,.35);background:linear-gradient(180deg,#fff,rgba(178,91,54,.03))}
+.hier .node.accent .badge{background:rgba(178,91,54,.1);color:var(--clay)}
+.leaf-row{margin-left:calc(5*30px);margin-top:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:var(--ink-soft)}
+.leaf-row .chip{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 11px;font-weight:500;box-shadow:var(--shadow)}
+.leaf-row .chip.ind{color:var(--forest);border-color:rgba(40,88,74,.3)}
+.leaf-row .chip.link{color:var(--clay);border-color:rgba(178,91,54,.3);background:rgba(178,91,54,.04)}
+.leaf-row .chip.val{color:var(--ink);border-color:var(--line)}
+.leaf-row .arr{color:var(--clay);font-weight:600}
+@media(max-width:760px){.hier .lvl,.hier .connector{margin-left:calc(var(--d,0)*16px)!important}.leaf-row{margin-left:0}}
+
+/* ---------- the sentence ---------- */
+.sentence{
+  margin-top:30px;padding:34px 30px;border-radius:var(--rad);
+  background:var(--ink);color:var(--paper-2);box-shadow:var(--shadow-lg);position:relative;overflow:hidden;
+}
+.sentence::before{content:"";position:absolute;inset:0;background:radial-gradient(600px 200px at 80% 0%,rgba(178,91,54,.22),transparent 70%);pointer-events:none}
+.sentence .lbl{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(246,242,234,.55);margin-bottom:18px}
+.s-line{display:flex;flex-wrap:wrap;align-items:center;gap:9px;font-size:clamp(16px,2vw,21px);line-height:2.1;position:relative}
+.pill{
+  display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border-radius:999px;font-weight:500;font-size:.92em;
+  border:1px solid rgba(246,242,234,.18);background:rgba(246,242,234,.06);position:relative;
+}
+.pill .pk{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:rgba(246,242,234,.5)}
+.pill.agg{background:rgba(178,91,54,.22);border-color:rgba(200,120,79,.5);color:#F4D9C8}
+.pill.q{background:rgba(62,114,99,.28);border-color:rgba(62,114,99,.6);color:#CDE6DD}
+.pill.src{background:rgba(246,242,234,.1)}
+.pill.flt{background:rgba(246,242,234,.06);color:rgba(246,242,234,.78)}
+.s-line .arrow{color:var(--clay-soft);font-weight:700;font-size:1.1em;margin:0 2px}
+.result{font-family:'IBM Plex Mono',monospace;font-weight:600;color:#fff;font-size:1.05em}
+.result .n{color:rgba(246,242,234,.55);font-weight:400;font-size:.82em}
+.s-note{margin-top:18px;font-size:13.5px;color:rgba(246,242,234,.6);font-style:italic;font-family:'Fraunces',serif}
+
+/* ---------- numbered beats ---------- */
+.beats{margin-top:28px;counter-reset:b;display:grid;gap:14px}
+.beat{display:flex;gap:16px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 20px;box-shadow:var(--shadow);transition:border-color .2s}
+.beat:hover{border-color:rgba(40,88,74,.3)}
+.beat::before{
+  counter-increment:b;content:counter(b);flex:none;width:30px;height:30px;border-radius:50%;
+  background:var(--forest);color:var(--paper-2);font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:14px;
+  display:grid;place-items:center;margin-top:1px;
+}
+.beat .bt{color:var(--ink-soft);font-size:15.5px}
+.beat .bt b{color:var(--ink);font-weight:600}
+.beat .bt code{font-family:'IBM Plex Mono',monospace;font-size:13px;background:rgba(40,88,74,.07);color:var(--forest);padding:1px 6px;border-radius:5px}
+
+/* ---------- phasing ---------- */
+.phase{border:1px solid var(--line);border-radius:var(--rad);background:var(--card);box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column}
+.phase .ph-h{padding:18px 22px;border-bottom:1px solid var(--line-soft);display:flex;align-items:center;justify-content:space-between;gap:12px}
+.phase .ph-h h3{font-family:'Fraunces',serif;font-size:21px;font-weight:600}
+.phase .pill-ph{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;padding:4px 10px;border-radius:999px}
+.p1 .pill-ph{background:rgba(40,88,74,.12);color:var(--forest)}
+.p2 .pill-ph{background:rgba(178,91,54,.12);color:var(--clay)}
+.pf .pill-ph{background:rgba(124,122,108,.14);color:var(--ink-faint)}
+.phase ul{list-style:none;padding:16px 22px;display:grid;gap:11px}
+.phase li{position:relative;padding-left:22px;font-size:15px;color:var(--ink-soft)}
+.phase li strong{color:var(--ink);font-weight:600}
+.phase li::before{content:"";position:absolute;left:2px;top:9px;width:7px;height:7px;border-radius:2px;background:var(--clay)}
+.p1 li::before{background:var(--forest)}
+.pf li::before{background:var(--ink-faint)}
+
+/* ---------- removals ---------- */
+.rm{border:1px solid var(--line);border-radius:var(--rad);background:var(--card);box-shadow:var(--shadow);padding:24px;position:relative;overflow:hidden}
+.rm .x{font-family:'Fraunces',serif;font-size:22px;font-weight:600;display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.rm .x .mk{width:30px;height:30px;border-radius:8px;background:rgba(168,71,46,.1);color:var(--red);display:grid;place-items:center;font-size:18px;font-weight:700;flex:none}
+.rm p{color:var(--ink-soft);font-size:15.5px;margin-top:6px}
+.rm p strong{color:var(--ink)}
+.rm .out{margin-top:14px;display:flex;flex-wrap:wrap;gap:7px}
+.rm .out code{font-family:'IBM Plex Mono',monospace;font-size:12px;background:rgba(168,71,46,.06);color:var(--red);border:1px solid rgba(168,71,46,.18);padding:3px 8px;border-radius:6px;text-decoration:line-through;text-decoration-color:rgba(168,71,46,.4)}
+.rm .keep{margin-top:16px;padding:12px 16px;border-radius:10px;background:rgba(40,88,74,.06);border:1px solid rgba(40,88,74,.18);font-size:14.5px;color:var(--forest)}
+.rm .keep b{color:var(--forest)}
+
+/* ---------- health tiers ---------- */
+.tiers{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+.tier{flex:1;min-width:150px;border-radius:12px;padding:16px 18px;border:1px solid var(--line);background:var(--card);box-shadow:var(--shadow)}
+.tier .dot{width:12px;height:12px;border-radius:50%;display:inline-block;margin-right:8px;vertical-align:middle}
+.tier .lab{font-family:'Fraunces',serif;font-weight:600;font-size:17px}
+.tier .rng{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--ink-faint);margin-top:4px}
+.tier.g{border-color:rgba(62,114,99,.4)} .tier.g .dot{background:var(--green)}
+.tier.a{border-color:rgba(176,122,24,.4)} .tier.a .dot{background:var(--amber)}
+.tier.r{border-color:rgba(168,71,46,.4)} .tier.r .dot{background:var(--red)}
+.repnum{margin-top:22px;display:inline-flex;align-items:center;gap:0;border-radius:12px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow);font-family:'IBM Plex Mono',monospace}
+.repnum .scope{background:var(--paper-2);padding:12px 16px;font-size:13px;color:var(--ink-faint);font-weight:500;border-right:1px solid var(--line)}
+.repnum .val{background:var(--forest);color:var(--paper-2);padding:12px 18px;font-size:18px;font-weight:600}
+
+/* ---------- ledger ---------- */
+.ledger td .num{font-family:'IBM Plex Mono',monospace;font-weight:600;color:var(--clay)}
+
+/* ---------- success path ---------- */
+.path{margin-top:28px;display:grid;gap:0}
+.step{display:flex;gap:16px;align-items:flex-start;padding:14px 0;position:relative}
+.step:not(:last-child)::after{content:"";position:absolute;left:13px;top:34px;bottom:-6px;width:2px;background:linear-gradient(var(--forest),var(--clay));opacity:.3}
+.step .ico{flex:none;width:28px;height:28px;border-radius:50%;border:2px solid var(--forest);background:var(--paper);display:grid;place-items:center;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:var(--forest);z-index:1}
+.step .st{font-size:16px;color:var(--ink-soft)}
+.step .st b{color:var(--ink);font-weight:600}
+.step .st .mono{color:var(--forest);font-size:14px}
+
+/* ---------- footer ---------- */
+footer{padding:64px 0 80px;border-top:1px solid var(--line)}
+footer .fin{font-family:'Fraunces',serif;font-style:italic;font-size:clamp(22px,3vw,30px);line-height:1.3;max-width:24ch;color:var(--ink)}
+footer .fin em{color:var(--clay);font-style:italic}
+footer .credit{margin-top:34px;font-size:13.5px;color:var(--ink-faint);display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center}
+footer .credit .sep{width:4px;height:4px;border-radius:50%;background:var(--line)}
+
+/* status chips inline */
+.chip-s{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.03em;padding:2px 8px;border-radius:6px;text-transform:uppercase}
+.chip-s.pre{background:rgba(176,122,24,.13);color:var(--amber)}
+.chip-s.post{background:rgba(62,114,99,.14);color:var(--green)}
+.chip-s.only{background:rgba(124,122,108,.14);color:var(--ink-faint)}
+
+/* ========================================================= */
+/* ======  FIELDWORK-SPECIFIC COMPONENTS (same idiom)  ===== */
+/* ========================================================= */
+
+/* ---------- the signature 5-stage pipeline ---------- */
+.pipeline{margin-top:32px;display:flex;align-items:stretch;gap:0;overflow-x:auto;padding:4px 2px 10px;scrollbar-width:none}
+.pipeline::-webkit-scrollbar{display:none}
+.pstage{
+  flex:1 1 0;min-width:158px;background:var(--card);border:1px solid var(--line);border-radius:12px;
+  padding:16px 16px 18px;box-shadow:var(--shadow);position:relative;display:flex;flex-direction:column;gap:7px;
+  transition:transform .25s,border-color .25s,box-shadow .25s;
+}
+.pstage:hover{transform:translateY(-4px);border-color:rgba(40,88,74,.35);box-shadow:var(--shadow-lg)}
+.pstage .snum{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:var(--ink-faint);letter-spacing:.08em}
+.pstage .par{margin-bottom:1px}
+.pstage .par .ar{font-size:19px;font-weight:600;color:var(--ink)}
+.pstage .pen{font-family:'Fraunces',serif;font-weight:600;font-size:16px;letter-spacing:-.01em;color:var(--ink)}
+.pstage .pmap{font-size:13px;color:var(--ink-soft);line-height:1.4;margin-top:2px}
+.pstage.hot{border-color:rgba(178,91,54,.4);background:linear-gradient(180deg,#fff,rgba(178,91,54,.045))}
+.pstage.hot .snum{color:var(--clay)}
+.pstage.hot .pen{color:var(--clay)}
+.pstage .tagline{margin-top:auto;padding-top:9px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.03em;text-transform:uppercase;color:var(--clay);font-weight:600}
+.parrow{flex:none;align-self:center;color:var(--clay-soft);font-weight:700;font-size:20px;padding:0 5px}
+@media(max-width:760px){.parrow{transform:rotate(90deg);padding:6px 0}.pipeline{flex-direction:column}}
+.pipe-note{margin-top:18px;display:inline-flex;align-items:center;gap:10px;font-size:14px;color:var(--ink-soft);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:9px 16px;box-shadow:var(--shadow)}
+.pipe-note b{color:var(--ink);font-weight:600}
+.pipe-note .kk{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--clay);font-weight:600}
+.folders{margin-top:22px}
+.folders .flab{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);font-weight:600;margin-bottom:12px}
+.folder-row{display:flex;flex-wrap:wrap;gap:12px}
+.folder{
+  display:flex;align-items:center;gap:10px;background:var(--paper-2);border:1px dashed var(--line);border-radius:10px;
+  padding:11px 16px;font-size:14.5px;color:var(--ink-soft);box-shadow:var(--shadow);
+}
+.folder .fico{color:var(--gold);font-size:15px}
+.folder b{color:var(--ink);font-weight:600}
+.folder .ar{font-weight:600}
+
+/* ---------- RAG dots ---------- */
+.rag{width:11px;height:11px;border-radius:50%;display:inline-block;vertical-align:middle;flex:none}
+.rag.r{background:var(--red);box-shadow:0 0 0 3px rgba(168,71,46,.14)}
+.rag.a{background:var(--amber);box-shadow:0 0 0 3px rgba(176,122,24,.14)}
+.rag.g{background:var(--green);box-shadow:0 0 0 3px rgba(62,114,99,.14)}
+
+/* ---------- triage mockup table ---------- */
+.mock-cap{margin-top:26px;margin-bottom:-8px;display:flex;align-items:center;gap:9px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-faint);font-weight:600}
+.mock-cap .badge-mk{background:rgba(178,91,54,.1);color:var(--clay);padding:2px 8px;border-radius:6px}
+.mono-cell{font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:var(--ink)}
+.mono-cell .owe{color:var(--red);font-weight:600}
+.scope-cell{font-size:14px}
+.scope-cell .sc-sep{color:var(--ink-faint);margin:0 5px}
+
+/* ---------- person-state cards ---------- */
+.states{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:24px}
+@media(max-width:820px){.states{grid-template-columns:1fr}}
+.state{border-radius:12px;padding:18px 20px;border:1px solid var(--line);background:var(--card);box-shadow:var(--shadow);position:relative;overflow:hidden}
+.state .sh-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.state .sname{font-family:'Fraunces',serif;font-weight:600;font-size:18px;color:var(--ink)}
+.state p{font-size:14.5px;color:var(--ink-soft)}
+.state.sched{border-color:rgba(62,114,99,.4)}
+.state.sched::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--green)}
+.state.risk{border-color:rgba(176,122,24,.4)}
+.state.risk::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--amber)}
+.state.breach{border-color:rgba(168,71,46,.45)}
+.state.breach::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--red)}
+.chip-s.st-g{background:rgba(62,114,99,.14);color:var(--green)}
+.chip-s.st-a{background:rgba(176,122,24,.13);color:var(--amber)}
+.chip-s.st-r{background:rgba(168,71,46,.13);color:var(--red)}
+
+/* ---------- chase-round effort timeline ---------- */
+.timeline{margin-top:26px;display:flex;align-items:stretch;gap:0;overflow-x:auto;padding:4px 2px 10px;scrollbar-width:none}
+.timeline::-webkit-scrollbar{display:none}
+.tround{
+  flex:1 1 0;min-width:172px;background:var(--card);border:1px solid var(--line);border-radius:12px;
+  padding:15px 18px;box-shadow:var(--shadow);position:relative;transition:transform .25s,border-color .25s;
+}
+.tround:hover{transform:translateY(-3px);border-color:rgba(40,88,74,.3)}
+.tround .rnum{font-family:'Fraunces',serif;font-weight:600;font-size:18px;color:var(--ink)}
+.tround .rdate{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--clay);font-weight:600;margin-top:2px}
+.tround .rflow{margin-top:10px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--ink-soft)}
+.tround .rflow .out{color:var(--ink)}
+.tround .rflow .resp{color:var(--forest);font-weight:600}
+.tarrow{flex:none;align-self:center;color:var(--clay-soft);font-weight:700;font-size:18px;padding:0 6px}
+@media(max-width:760px){.tarrow{transform:rotate(90deg);padding:5px 0}.timeline{flex-direction:column}}
+
+/* ---------- disposition status pills ---------- */
+.pill-st{font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:3px 9px;border-radius:6px;white-space:nowrap;display:inline-block}
+.pill-st.del{background:rgba(168,71,46,.13);color:var(--red)}
+.pill-st.rel{background:rgba(176,122,24,.14);color:var(--amber)}
+.pill-st.reb{background:rgba(40,88,74,.12);color:var(--forest)}
+td .route{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--ink-faint);display:block;margin-top:3px}
+
+/* ---------- role split cards ---------- */
+.card.role-lead{border-color:rgba(40,88,74,.32);background:linear-gradient(180deg,#fff,rgba(40,88,74,.035))}
+.card.role-lead .k{color:var(--forest)}
+.card.role-op{border-color:rgba(178,91,54,.32);background:linear-gradient(180deg,#fff,rgba(178,91,54,.035))}
+
+/* ---------- open-questions flag ---------- */
+.qflag{display:inline-flex;align-items:center;gap:9px;margin-top:6px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--clay);font-weight:600;background:rgba(178,91,54,.08);border:1px solid rgba(178,91,54,.24);padding:6px 13px;border-radius:999px}
+.beats.q .beat::before{background:var(--clay)}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<nav class="deck">
+  <div class="row">
+    <span class="brand"><span class="dot"></span>Atharnami<span class="full" style="color:var(--ink-faint);font-weight:400">&nbsp;· Fieldwork PRD</span></span>
+    <div class="links" id="navlinks">
+      <a class="nlink" href="#problem">Problem</a>
+      <a class="nlink" href="#pipeline">Pipeline</a>
+      <a class="nlink" href="#glossary">Glossary</a>
+      <a class="nlink" href="#board">Chase Board</a>
+      <a class="nlink" href="#advance">Auto-advance</a>
+      <a class="nlink" href="#baseline">Baseline</a>
+      <a class="nlink" href="#subject">Subject &amp; Tools</a>
+      <a class="nlink" href="#sidebar">Sidebar</a>
+      <a class="nlink" href="#decisions">Decisions</a>
+      <a class="nlink" href="#phasing">Phasing</a>
+      <a class="nlink" href="#success">Success</a>
+      <a class="nlink" href="#questions">Open Qs</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="wrap stagger">
+    <div class="eyebrow"><span class="rule"></span>Product Requirements · Fieldwork · Draft for approval</div>
+    <h1 class="title">Fieldwork — the <em>Chase&nbsp;Board</em> &amp; the 5-Stage <em>Pipeline</em>.</h1>
+    <p class="subtitle">A per-assessment surface where the Assessment is the card that advances itself.</p>
+    <p class="lede">Fieldwork today is a <strong>blended, guessed-wave surface</strong> — six pages, a bare program dropdown, a "current wave" that is invisible and inferred, and a queue that flattens every beneficiary of every program into one undifferentiated list. This PRD turns it into two things: a <strong>per-assessment chase board</strong> that answers three questions at a glance — where's my rate vs. target &amp; deadline, who still owes me, what's my one next move — and a <strong>5-stage lifecycle pipeline</strong> (<span class="ar" lang="ar">التأطير</span> → <span class="ar" lang="ar">التصميم</span> → <span class="ar" lang="ar">العمل الميداني</span> → <span class="ar" lang="ar">التحليل</span> → <span class="ar" lang="ar">التقرير</span>) that retires the ClickUp <span class="ar" lang="ar">خط الإنتاج</span>.</p>
+    <div class="meta-row">
+      <span class="tag accent">For review by&nbsp; <b>Anas</b></span>
+      <span class="tag">Owner&nbsp; <b>Baraa · Qararat</b></span>
+      <span class="tag">Drafted&nbsp; <b>2026-07-01</b></span>
+      <span class="tag">Author&nbsp; <b>Nami</b></span>
+      <span class="tag">Sits on&nbsp; <b>the Programs PRD</b></span>
+    </div>
+  </div>
+</header>
+
+<!-- ============ 1 · PROBLEM ============ -->
+<section id="problem" class="sec">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">§2 — From a real program</span>
+      <h2 class="sh">Three walls, opening one program.</h2>
+      <p class="sec-intro">Abdu opens <strong>Fieldwork</strong> to run collection on <span class="ar" lang="ar">الاستدامة المالية</span> <em>(Financial Sustainability)</em> under bin Mahfouz — a <strong>Post-only</strong> effort against <strong>~4 funded organizations</strong>, each assessed by interview, each with a researched baseline. He hits three walls before doing anything useful.</p>
+    </div>
+
+    <div class="grid g3 reveal">
+      <div class="card">
+        <span class="k">Wall 1 — Scope</span>
+        <h3>Which assessment is this?</h3>
+        <p>He can't tell which assessment a number belongs to. Every assigned beneficiary of every program flattens into one queue — <strong>no assessment boundary at all.</strong></p>
+      </div>
+      <div class="card">
+        <span class="k">Wall 2 — Who owes</span>
+        <h3>Who still owes a response?</h3>
+        <p>The board is organized around the <em>relay</em> — who forwards the link — not around <strong>who still owes a response.</strong></p>
+      </div>
+      <div class="card">
+        <span class="k">Wall 3 — Next move</span>
+        <h3>What's my one next move?</h3>
+        <p>Nothing ranks the work or points at the next action. The effort history that would justify a rate to a funder is a <strong>dead stub.</strong></p>
+      </div>
+    </div>
+
+    <div class="callout reveal">"I can't tell which assessment a number belongs to, who still owes me a response, or what my next move is."</div>
+
+    <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin:54px 0 0" class="reveal">The code makes those walls concrete</h3>
+    <div class="tbl-wrap reveal">
+      <div class="tbl-scroll">
+      <table>
+        <caption>Failure in code today → what it does to Abdu</caption>
+        <thead><tr><th style="width:42%">Failure in code today</th><th>What it does to Abdu</th></tr></thead>
+        <tbody>
+          <tr><td><b>No scope UI</b> on <span class="code-cell">EnumeratorDashboard</span></td><td>Every assigned beneficiary of every program flattens into one queue — no assessment boundary at all.</td></tr>
+          <tr><td>The <b>"guessed current wave" heuristic</b>, duplicated across <span class="code-cell">use-enumerator-cockpit.ts</span> and <span class="code-cell">useDataQuality.ts</span></td><td>The wave is inferred (<span class="code-cell">max(batch_number)</span>) and diverges between two files — a live correctness risk.</td></tr>
+          <tr><td><b>Partner-grouped dashboard</b></td><td>Fieldwork is organized around the <em>relay</em> (who forwards the link), not around <em>who still owes a response.</em></td></tr>
+          <tr><td><span class="code-cell">trajectory</span> hardcoded <span class="code-cell">[]</span> in DataQuality</td><td>The effort history that would justify a response rate to a funder is a dead stub.</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+    <div class="callout green reveal">The base PRD deleted Partners and gave every measurement effort a real <span class="mono" style="font-style:normal;font-size:15px;color:var(--forest)">assessment_id</span> spine. This PRD is what fieldwork becomes once that spine exists: <strong>"of the people we're assessing in <em>this</em> assessment, who responded — and what's my next move?"</strong></div>
+  </div>
+</section>
+
+<!-- ============ 2 · PIPELINE (signature) ============ -->
+<section id="pipeline" class="sec">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">§3 + §5 — The lifecycle spine</span>
+      <h2 class="sh">The 5-stage pipeline — the Assessment is the <em style="color:var(--clay)">card that moves</em>.</h2>
+      <p class="sec-intro">Five stages, <strong>grounded in the golden Dropbox folder structure</strong> — identical across all three clients (Al-Ahli, bin Mahfouz, Majid): 5 numbered stage folders + 3 cross-cutting folders. The pipeline is that structure made live. The <strong>card is the Assessment</strong>; Pre/Post is an explicit property, never inferred.</p>
+    </div>
+
+    <div class="pipeline reveal">
+      <div class="pstage">
+        <span class="snum">01</span>
+        <div class="par"><span class="ar" lang="ar">التأطير</span></div>
+        <div class="pen">Framing</div>
+        <div class="pmap">The <b>commercial / contract</b> layer — charter, RFP, proposals. Explicitly <b>not</b> the ToC.</div>
+        <div class="tagline">Program / Edition + budget</div>
+      </div>
+      <span class="parrow">→</span>
+      <div class="pstage">
+        <span class="snum">02</span>
+        <div class="par"><span class="ar" lang="ar">التصميم</span></div>
+        <div class="pen">Design</div>
+        <div class="pmap">Methodology · results framework &amp; indicators · M&amp;E plan · instruments.</div>
+        <div class="tagline">Impact Map + Link + Surveys</div>
+      </div>
+      <span class="parrow">→</span>
+      <div class="pstage hot">
+        <span class="snum">03</span>
+        <div class="par"><span class="ar" lang="ar">العمل الميداني</span></div>
+        <div class="pen">Fieldwork</div>
+        <div class="pmap">Send the tool · follow up · confirm collection complete.</div>
+        <div class="tagline">Chase board + Roster + Rounds</div>
+      </div>
+      <span class="parrow">→</span>
+      <div class="pstage">
+        <span class="snum">04</span>
+        <div class="par"><span class="ar" lang="ar">التحليل</span></div>
+        <div class="pen">Analysis</div>
+        <div class="pmap">Analysis of the collected data.</div>
+        <div class="tagline">Insights + RAG + Data Quality</div>
+      </div>
+      <span class="parrow">→</span>
+      <div class="pstage">
+        <span class="snum">05</span>
+        <div class="par"><span class="ar" lang="ar">التقرير</span></div>
+        <div class="pen">Report</div>
+        <div class="pmap">Draft report + final report.</div>
+        <div class="tagline">Reports</div>
+      </div>
+    </div>
+
+    <span class="pipe-note reveal"><span class="kk">card&nbsp;=</span> <b>one Assessment</b> — Program × Pre/Post × group. Al-Ahli cards look program-grain only because they're Post-only; bin Mahfouz splits Pre and Post into cards that <b>advance independently.</b></span>
+
+    <div class="folders reveal">
+      <div class="flab">3 cross-cutting folders — beside the 5 stages, live at all times</div>
+      <div class="folder-row">
+        <span class="folder"><span class="fico">▸</span><span class="ar" lang="ar">مراجع</span>&nbsp;<b>References</b></span>
+        <span class="folder"><span class="fico">▸</span><span class="ar" lang="ar">إدارة المشروع</span>&nbsp;<b>Project Mgmt</b></span>
+        <span class="folder"><span class="fico">▸</span><span class="ar" lang="ar">المخرجات المعتمدة</span>&nbsp;<b>Approved Deliverables</b></span>
+      </div>
+    </div>
+
+    <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin:54px 0 0" class="reveal">Stage → Atharnami surface</h3>
+    <div class="tbl-wrap reveal">
+      <div class="tbl-scroll">
+      <table>
+        <caption>Grounded in the golden folder structure</caption>
+        <thead><tr><th style="width:20%">Stage</th><th style="width:44%">Framing note</th><th>→ Atharnami surface</th></tr></thead>
+        <tbody>
+          <tr><td><span class="term">1 · <span class="ar" lang="ar">التأطير</span></span><br><span style="color:var(--ink-faint);font-size:13px">Framing</span></td><td>The <b>commercial / contract</b> layer — charter, RFP, technical &amp; financial proposal. <b>Explicitly not the ToC</b> (owner's correction).</td><td>Program / Edition setup + the surviving <span class="code-cell">budget</span> field.</td></tr>
+          <tr><td><span class="term">2 · <span class="ar" lang="ar">التصميم</span></span><br><span style="color:var(--ink-faint);font-size:13px">Design</span></td><td>Methodology · results framework &amp; indicators · M&amp;E plan · instruments.</td><td>Impact Map + the Link + tool / instrument design + <b>Surveys</b> (tool authoring).</td></tr>
+          <tr><td><span class="term" style="color:var(--clay)">3 · <span class="ar" lang="ar">العمل الميداني</span></span><br><span style="color:var(--ink-faint);font-size:13px">Fieldwork</span></td><td>Send the tool · follow up · confirm collection complete.</td><td>The <b>chase board</b> + Roster + Interviews + Chase Rounds.</td></tr>
+          <tr><td><span class="term">4 · <span class="ar" lang="ar">التحليل</span></span><br><span style="color:var(--ink-faint);font-size:13px">Analysis</span></td><td>Analysis.</td><td>Insights + RAG + <b>Data Quality</b>.</td></tr>
+          <tr><td><span class="term">5 · <span class="ar" lang="ar">التقرير</span></span><br><span style="color:var(--ink-faint);font-size:13px">Report</span></td><td>Draft report + final report.</td><td>Reports.</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+    <div class="callout reveal"><strong>The spine is always visible</strong> — the 5 stages render in the sidebar at all times, even when a stage is empty (greyed), the same way Fieldwork appears today before anything is collected.</div>
+  </div>
+</section>
+
+<!-- ============ 3 · GLOSSARY ============ -->
+<section id="glossary" class="sec">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">§3 — Glossary</span>
+      <h2 class="sh">The words, and what they are not.</h2>
+      <p class="sec-intro">Fieldwork's language is small and load-bearing. These terms keep the chase board honest.</p>
+    </div>
+    <div class="tbl-wrap reveal">
+      <div class="tbl-scroll">
+      <table>
+        <caption>Terms (AR / EN) — and what they are not</caption>
+        <thead><tr><th style="width:20%">Term</th><th>Definition</th><th style="width:22%">Not</th></tr></thead>
+        <tbody>
+          <tr><td><span class="term">Roster</span><br><span class="ar" lang="ar">كشف المُقيَّمين</span></td><td>The defined set of people to assess in <b>one</b> assessment. Sourced externally, imported. The <b>fixed denominator</b> for that assessment's response rate.</td><td class="not">A global people list</td></tr>
+          <tr><td><span class="term">Subject</span></td><td>A Roster row. <b>Always a person</b> (there's always a human to contact). <em>Optionally</em> "represents an Organization" → the org becomes the unit of analysis (§7).</td><td class="not">An abstract record</td></tr>
+          <tr><td><span class="term">Respondent /<br>Non-respondent</span><br><span class="ar" lang="ar">مُستجيب / غير مُستجيب</span></td><td>The two Subject states relative to the tool.</td><td class="not">A person's identity</td></tr>
+          <tr><td><span class="term">Beneficiary</span><br><span class="ar" lang="ar">المستفيد</span></td><td>The person as a <b>stable global identity</b> — unchanged from today.</td><td class="not">A per-assessment row</td></tr>
+          <tr><td><span class="term">Chase Round</span><br><span class="ar" lang="ar">جولة متابعة</span></td><td>A dated re-contact push; one per export. The unit of chasing effort.</td><td class="not">An SMS batch</td></tr>
+          <tr><td><span class="term">Assessment Lead</span></td><td>Approves / signs off; owns the assessment <em>in Atharnami</em> (the owner).</td><td class="not">The person who runs it</td></tr>
+          <tr><td><span class="term">Operator</span></td><td>Publishes, sends, chases (Abdu). Runs collection. <b>The approver is not the runner.</b></td><td class="not">The approver</td></tr>
+          <tr><td><span class="term">Tool</span></td><td>survey · interview · records — anything you <em>send out and collect back</em>.</td><td class="not">A survey only</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+    <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin:54px 0 0" class="reveal">The tests that keep things apart</h3>
+    <div class="tbl-wrap reveal">
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th style="width:30%">You're asking…</th><th style="width:34%">Answer</th><th>Because</th></tr></thead>
+        <tbody>
+          <tr><td><b>Is this a stage or a task?</b></td><td>A <span class="term" style="color:var(--clay)">stage</span> if the golden folder has a gating artifact for it; else it's not modeled.</td><td>The pipeline is stages + artifacts + approval holds — <b>not</b> a task graph (that's ClickUp).</td></tr>
+          <tr><td><b>Fill-and-return or interview?</b></td><td><span class="term" style="color:var(--forest)">Fill-and-return</span> (survey / records) → non-responder chase. <span class="term" style="color:var(--clay)">Interview</span> → schedule-then-conduct.</td><td>The <b>instrument routes the board</b> (§8).</td></tr>
+          <tr><td><b>Person or org unit?</b></td><td><span class="term" style="color:var(--forest)">Person</span> by default. <span class="term" style="color:var(--clay)">Org</span> when the Subject "represents an organization" (§7).</td><td>The contact is always human; the <em>unit of analysis</em> may flip.</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4 · CHASE BOARD (the heart) ============ -->
+<section id="board" class="sec">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">§4 — The chase board</span>
+      <h2 class="sh">The heart: the Operator's per-assessment <em style="color:var(--clay)">chase board</em>.</h2>
+      <p class="sec-intro">The user is the <strong>Operator running collection</strong> (Abdu / Baraa) — not the analyst, not the org. For <strong>one assessment at a time</strong> the board answers three questions at a glance.</p>
+    </div>
+
+    <div class="callout reveal">For <strong>one</strong> assessment at a time: <em>(1)</em> which assessment am I in, and where's my rate vs. target &amp; deadline? <em>(2)</em> who still owes me a response? <em>(3)</em> what's my one next move? &nbsp;— Acceptance test: <strong>"does it let the Operator make the next move at a glance?"</strong></div>
+
+    <!-- 4a triage landing -->
+    <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin:54px 0 0" class="reveal">4a · Triage landing → per-assessment board</h3>
+    <p class="body reveal">The landing is a <strong>triage list</strong> of the Operator's in-flight assessments, <strong>sorted worst-first</strong>. Click a row → the single-assessment board. A persistent breadcrumb <span class="mono" style="font-size:14px;color:var(--forest)">Program › Edition › Assessment</span> + an assessment switcher sits on the board.</p>
+
+    <div class="mock-cap reveal"><span class="badge-mk">mockup</span> Triage landing — worst-first (illustrative rows)</div>
+    <div class="tbl-wrap reveal">
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th style="width:38px">RAG</th><th>Scope</th><th>Instrument</th><th>Rate / target</th><th>Deadline</th><th># owe</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="rag r"></span></td>
+            <td class="scope-cell">bin Mahfouz <span class="sc-sep">›</span> <span class="ar" lang="ar">الاستدامة المالية</span> <span class="sc-sep">›</span> <b>Post</b></td>
+            <td class="mono-cell">interview</td>
+            <td class="mono-cell">0 / 4</td>
+            <td class="mono-cell">near</td>
+            <td class="mono-cell"><span class="owe">4</span></td>
+          </tr>
+          <tr>
+            <td><span class="rag a"></span></td>
+            <td class="scope-cell">Future Skills <span class="sc-sep">›</span> 2026 <span class="sc-sep">›</span> <b>Post</b></td>
+            <td class="mono-cell">survey</td>
+            <td class="mono-cell">78 / 200</td>
+            <td class="mono-cell">Jul 12</td>
+            <td class="mono-cell"><span class="owe">122</span></td>
+          </tr>
+          <tr>
+            <td><span class="rag g"></span></td>
+            <td class="scope-cell"><span class="ar" lang="ar">التطوع</span> <span class="sc-sep">›</span> 2026 <span class="sc-sep">›</span> <b>Pre</b></td>
+            <td class="mono-cell">survey</td>
+            <td class="mono-cell">61 / 90</td>
+            <td class="mono-cell">Jul 20</td>
+            <td class="mono-cell">29</td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+    <div class="tbl-wrap reveal">
+      <div class="tbl-scroll">
+      <table>
+        <caption>What each triage column means</caption>
+        <thead><tr><th style="width:26%">Triage column</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><b>Scope</b></td><td>Program › Edition › Assessment</td></tr>
+          <tr><td><b>Instrument</b></td><td>survey · records · interview</td></tr>
+          <tr><td><b>Rate / target</b></td><td>response rate vs. target</td></tr>
+          <tr><td><b>Deadline</b></td><td>the Assessment window end</td></tr>
+          <tr><td><b># still owe</b></td><td>count of Non-respondents</td></tr>
+          <tr><td><b>RAG dot</b></td><td>red / amber / green rollup</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+    <div class="callout reveal"><strong>Deadline + instrument are Assessment attributes</strong> — fieldwork <em>reads</em> them, it does not own them. The instrument <strong>routes the board</strong>: fill-and-return (survey / records) → non-responder chase; interview → schedule-then-conduct.</div>
+
+    <!-- 4b two clocks + person states -->
+    <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin:56px 0 0" class="reveal">4b · Two clocks &amp; the three person-states</h3>
+    <p class="body reveal">There are two clocks — the assessment's <strong>window</strong> (one deadline for everyone) and each person's <strong>slot</strong> (a booked time you can reschedule). A Subject's state is where their slot sits relative to the window. <span style="color:var(--ink-faint)">The per-person slot machinery already exists in code (<span class="code-cell">interview-lifecycle.ts</span>).</span></p>
+    <div class="states reveal">
+      <div class="state sched">
+        <div class="sh-row"><span class="chip-s st-g">Scheduled</span></div>
+        <p>Future slot, <b>within the window.</b></p>
+      </div>
+      <div class="state risk">
+        <div class="sh-row"><span class="chip-s st-a">At-risk</span></div>
+        <p>Slot has passed, <b>or</b> the next booked slot is beyond the deadline.</p>
+      </div>
+      <div class="state breach">
+        <div class="sh-row"><span class="chip-s st-r">Breached</span></div>
+        <p>Deadline passed and they <b>still owe.</b></p>
+      </div>
+    </div>
+    <div class="callout reveal">The <strong>deadline is a soft flag</strong> — it never blocks booking or logging past it — but a breach <strong>rolls up RED</strong> to the board header ("118 owing · 12 past deadline") and pushes the assessment up the triage. A separate, milder <strong>stale-contact cadence</strong> (<span class="mono" style="font-style:normal;font-size:15px">chase_after_days</span>, renamed from <span class="mono" style="font-style:normal;font-size:15px">overdue_after_days</span>) orders the daily mid-window queue, independent of the hard deadline.</div>
+
+    <!-- 4c three dates -->
+    <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin:56px 0 0" class="reveal">4c · The three dates + the soft threshold</h3>
+    <div class="tbl-wrap reveal">
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th style="width:26%">Date</th><th style="width:28%">Who sets it</th><th>Drives</th></tr></thead>
+        <tbody>
+          <tr><td><span class="term">Collection-opened</span></td><td>Operator-set, defaults to Assessment start</td><td>The response-rate clock + the chase threshold. <em>(The initial Typeform send is external, so the Operator sets "the day I blasted it.")</em></td></tr>
+          <tr><td><span class="term">Deadline</span> <span class="code-cell">end_date</span></td><td>Assessment</td><td>The breach / red rollup.</td></tr>
+          <tr><td><span class="term">Batch-exported</span></td><td>Auto-stamped per export</td><td>The "days since I last chased" round cadence.</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+    <div class="callout green reveal">The <strong>threshold is a soft nudge, never a gate</strong>: the board lights up <strong>"N Non-respondents ready to chase"</strong> once <span class="mono" style="font-style:normal;font-size:15px">chase_after_days</span> passes — but the export is <strong>always available on demand.</strong></div>
+
+    <!-- 4d board moves -->
+    <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin:56px 0 0" class="reveal">4d · Two board moves only — sending stays out of the platform</h3>
+    <p class="body reveal">The board's job is to hand a <strong>correct per-assessment Non-respondent list</strong> to export — it does <strong>not</strong> send. Keep the OurSMS Excel-export model (<span class="code-cell">Name / Phone / Message / Link</span>).</p>
+    <div class="tbl-wrap reveal">
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th style="width:32%">Move</th><th>What it does</th></tr></thead>
+        <tbody>
+          <tr><td><span class="term" style="color:var(--forest)">Remind</span></td><td>Beneficiary-direct. <b>One reminder template</b> (collapse the old base + <span class="code-cell">beneficiary_reminder</span>). Single person or select-all → export.</td></tr>
+          <tr><td><span class="term" style="color:var(--forest)">Log contact / move the interview</span></td><td>Record an attempt or reschedule a slot.</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+    <div class="rm reveal" style="margin-top:22px">
+      <div class="x"><span class="mk">✕</span>Cut entirely — all partner-relay scaffolding</div>
+      <p>Partners are deleted, so the escalation machinery built around the <strong>relay</strong> goes with them.</p>
+      <div class="out">
+        <code>SMS Tier 1 / 2 / 3</code><code>escalate_after_attempts</code><code>escalation_tier engine</code><code>batch_count-as-config</code>
+      </div>
+    </div>
+
+    <!-- 4e chase rounds timeline -->
+    <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin:56px 0 0" class="reveal">4e · Chase Rounds — the first-class effort record</h3>
+    <p class="body reveal">Every export is a dated <strong>round</strong> of chasing — and the stack of rounds is the evidence you hand the funder to justify the response rate. Rename <span class="code-cell">sms_batches</span> → <strong>Chase Round</strong> (channel-agnostic; <em>not</em> SMS). Each export auto-creates one Round: auto-numbered, dated, # Non-respondents pushed, optional note. Shown as an <strong>effort timeline</strong> on the board.</p>
+
+    <div class="timeline reveal">
+      <div class="tround">
+        <div class="rnum">Round 1</div>
+        <div class="rdate">Jul 1</div>
+        <div class="rflow"><span class="out">118 out</span> → <span class="resp">44 responded</span></div>
+      </div>
+      <span class="tarrow">→</span>
+      <div class="tround">
+        <div class="rnum">Round 2</div>
+        <div class="rdate">Jul 9</div>
+        <div class="rflow"><span class="out">74 out</span> → <span class="resp">34 responded</span></div>
+      </div>
+      <span class="tarrow">→</span>
+      <div class="tround">
+        <div class="rnum">Round 3</div>
+        <div class="rdate">…</div>
+        <div class="rflow" style="color:var(--ink-faint)">next export auto-adds a round</div>
+      </div>
+    </div>
+    <div class="callout reveal">This is the <strong>evidence handed back to the org to justify the response rate — it must flow into the Report later.</strong> Round-grain is Abdu's core record (the Operator layer). Per-person attempt history stays the analyst / attrition layer (Data Quality) — never a row Abdu fills by hand.</div>
+  </div>
+</section>
+
+<!-- ============ 5 · AUTO-ADVANCE & GATES ============ -->
+<section id="advance" class="sec">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">§5 — Auto-advance &amp; approval gates</span>
+      <h2 class="sh">The card advances on <em style="color:var(--clay)">evidence</em>, holds on <em style="color:var(--forest)">approval</em>.</h2>
+      <p class="sec-intro">It flows forward the instant a stage's real artifact exists; a gate is a hold that blocks that flow until a Lead (or optionally the Client) signs off — and "sign off" literally means promoting the artifact into <span class="ar" lang="ar">المخرجات المعتمدة</span> (Approved Deliverables).</p>
+    </div>
+
+    <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin:0 0 0" class="reveal">5a · Auto-advance — the artifact is the trigger</h3>
+    <div class="tbl-wrap reveal">
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th style="width:38%">From → To</th><th>Fires when the real artifact exists</th></tr></thead>
+        <tbody>
+          <tr><td><span class="term">Framing → Design</span></td><td>Results framework defined</td></tr>
+          <tr><td><span class="term">Design → Fieldwork</span></td><td>Tool / instrument <b>published</b></td></tr>
+          <tr><td><span class="term">Fieldwork → Analysis</span></td><td>Collection closed — <b>target hit OR deadline passed</b> (the <em>same</em> breach signal from §4b)</td></tr>
+          <tr><td><span class="term">Analysis → Report</span></td><td>Insights generated</td></tr>
+          <tr><td><span class="term">Report → Done</span></td><td>Report delivered</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+    <div class="callout reveal">No manual dragging. Auto-advance is precisely what <strong>replaces the manual ClickUp drag.</strong></div>
+
+    <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin:56px 0 0" class="reveal">5b · Approval gates — holds that block auto-advance</h3>
+    <div class="tbl-wrap reveal">
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th style="width:22%">Gate</th><th>Artifact promoted to Approved Deliverables</th><th style="width:26%">Approver</th></tr></thead>
+        <tbody>
+          <tr><td><span class="term">Framing-exit</span></td><td>Proposal / contract</td><td>Lead (internal) and/or Client (optional)</td></tr>
+          <tr><td><span class="term">Design-exit</span></td><td>Results framework</td><td>Lead. Instrument sign-off is <b>Lead-internal by default</b> — optional client <em>review</em>, not a hard client gate.</td></tr>
+          <tr><td><span class="term">Report-exit</span></td><td>Final report</td><td>Lead + <b>Client acceptance</b></td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+    <div class="callout green reveal"><strong>"Approve" = promote the artifact to</strong> <span class="ar" lang="ar">المخرجات المعتمدة</span> <strong>(Approved Deliverables)</strong> — that folder is the definition of "done for this stage."</div>
+
+    <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin:56px 0 22px" class="reveal">The role split — the Lead approves, the Operator runs</h3>
+    <div class="grid g2 reveal">
+      <div class="card role-lead">
+        <span class="k">Assessment Lead — the owner</span>
+        <h3>Approves / signs off</h3>
+        <p>Owns the assessment <em>in Atharnami</em>. Holds the gates, promotes artifacts into <span class="ar" lang="ar">المخرجات المعتمدة</span>. Approves — but does <b>not</b> run collection.</p>
+      </div>
+      <div class="card role-op">
+        <span class="k">Operator — Abdu</span>
+        <h3>Publishes, sends, chases</h3>
+        <p>Runs collection: publishes the tool, blasts it, works the chase board, exports Chase Rounds. Runs — but does <b>not</b> approve.</p>
+      </div>
+    </div>
+    <div class="callout reveal"><strong>The approver is not the runner.</strong> This split drives the whole chase board.</div>
+  </div>
+</section>
+
+<!-- ============ 6 · BASELINE & PROVENANCE ============ -->
+<section id="baseline" class="sec">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">§6 — Baseline / Pre-Post &amp; provenance</span>
+      <h2 class="sh">Every Post indicator carries its own <em style="color:var(--clay)">baseline</em>.</h2>
+      <p class="sec-intro">Baseline is <strong>first-class on every Post / endline indicator</strong>: it holds <strong>baseline + current</strong> in the same box, and the baseline wears a <strong>provenance tag</strong> that tells the funder how much to trust it — this is what makes the number defensible.</p>
+    </div>
+    <div class="tbl-wrap reveal">
+      <div class="tbl-scroll">
+      <table>
+        <caption>Baseline provenance — how much to trust it</caption>
+        <thead><tr><th style="width:34%">Baseline provenance</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><span class="chip-s post">from a real Pre assessment</span> <span style="color:var(--ink-faint)">(linked)</span></td><td>Measured against a genuine Pre card.</td></tr>
+          <tr><td><span class="chip-s pre">researched / estimated</span></td><td>Manually entered from desk research.</td></tr>
+          <tr><td><span class="chip-s only">client-provided</span></td><td>Supplied by the client.</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+    <div class="callout reveal">A <strong>Pre card / roster exists only when Pre data is actually collected.</strong> The common case (bin Mahfouz default) = a <strong>single Post card</strong> whose indicators carry manually-entered researched baselines — no Pre card at all.</div>
+
+    <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin:54px 0 0" class="reveal">The two shapes</h3>
+    <div class="tbl-wrap reveal">
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th style="width:20%">Shape</th><th style="width:40%">Cards</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><span class="term">Post-only</span></td><td>1 pipeline card <span style="color:var(--ink-faint)">(<b>the default</b> — program already ran)</span></td><td>bin Mahfouz <span class="ar" lang="ar">الاستدامة المالية</span>; all Al-Ahli programs</td></tr>
+          <tr><td><span class="term">Pre+Post</span></td><td>2 linked Assessments under one Edition, <b>advancing independently</b></td><td><span class="ar" lang="ar">مهارات المستقبل</span> Future Skills (~200 students, survey)</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+    <div class="callout green reveal">The <strong>third axis inside an Assessment = "Group"</strong> <span class="ar" lang="ar">(الفئة)</span> — Students, Funded Organizations, Parents. It's the same program-scoped controlled list as the base PRD — part of what <strong>defines</strong> a separate Assessment, not a sub-division inside one. Carry-forward stays stamped <span class="mono" style="font-style:normal;font-size:14px;color:var(--clay)">carried_from_prior_edition</span>; the "researched / client-provided" tags simply extend that same provenance vocabulary to the baseline slot.</div>
+  </div>
+</section>
+
+<!-- ============ 7 · SUBJECT & UNIFIED TOOL ============ -->
+<section id="subject" class="sec">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">§7 — Subject &amp; the unified tool model</span>
+      <h2 class="sh">A list of people — sometimes a <em style="color:var(--clay)">doorway</em> to an org.</h2>
+      <p class="sec-intro">The chase list is always a list of people — but sometimes the person is a doorway to an organization, and it's the organization's numbers you're recording.</p>
+    </div>
+    <div class="tbl-wrap reveal">
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th style="width:26%">Case</th><th style="width:18%">Unit of analysis</th><th style="width:18%">Data grain</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><span class="term">Plain Subject</span></td><td>The person</td><td class="mono-cell">Person</td><td>Future Skills — a student answers about themselves.</td></tr>
+          <tr><td><span class="term" style="color:var(--clay)">Subject represents an Organization</span></td><td><b>The Organization</b></td><td class="mono-cell" style="color:var(--clay)">Org grain</td><td>bin Mahfouz <span class="ar" lang="ar">الاستدامة المالية</span> — one contact <em>per funded org</em>; you record the <b>org's</b> budget / sustainability data, not the person's.</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+    <div class="callout reveal">The Roster <strong>always has a person to contact</strong> (that's why Subject is always a person). The "represents an org" flag flips the <strong>unit of analysis</strong> to the organization while keeping the <strong>contact</strong> human — this is how bin Mahfouz's <strong>4 funded orgs</strong> are chased.</div>
+
+    <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin:54px 0 0" class="reveal">The unified tool model</h3>
+    <p class="body reveal">Survey, interview, and records are all just <strong>tools</strong> — you send something out and collect something back. The only difference the board cares about is <strong>fill-and-return vs. scheduled conversation</strong>. <span style="color:var(--ink-faint)">New: records = a survey-shaped tool sent to the org to collect factual data (e.g. its budget); the org fills it in.</span></p>
+    <div class="tbl-wrap reveal">
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th style="width:30%">Tool type</th><th>Board routing</th></tr></thead>
+        <tbody>
+          <tr><td><span class="term" style="color:var(--forest)">survey + records</span></td><td><b>Fill-and-return</b> → non-responder chase + Chase Rounds + OurSMS export.</td></tr>
+          <tr><td><span class="term" style="color:var(--clay)">interview</span></td><td><b>Interview lifecycle</b> → schedule → conduct → complete; feeds the interview → indicator Link.</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 8 · SIDEBAR DISPOSITION ============ -->
+<section id="sidebar" class="sec">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">§8 — Navigation &amp; sidebar disposition</span>
+      <h2 class="sh">8 tabs collapse to ~2 surfaces + the Roster.</h2>
+      <p class="sec-intro">Surveys moves up to <strong>Design</strong>, Data Quality moves up to <strong>Analysis</strong>, and the two Partner tabs die. Below: today → what happens.</p>
+    </div>
+    <div class="tbl-wrap reveal">
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th style="width:26%">Tab (route)</th><th style="width:26%">Today</th><th>What happens</th></tr></thead>
+        <tbody>
+          <tr><td>My Fieldwork <span class="code-cell">/fieldwork</span></td><td>Blended, guessed-wave queue</td><td><span class="pill-st reb">Rebuilt</span> as the per-assessment <b>chase board</b> (partner grouping deleted; guessed-wave gone).</td></tr>
+          <tr><td>Fieldwork Overview <span class="code-cell">/fieldwork/overview</span></td><td>One card per program</td><td><span class="pill-st reb">Repurposed</span> as the <b>triage landing</b> (one row per Assessment, worst-first).</td></tr>
+          <tr><td>Beneficiaries <span class="code-cell">/beneficiaries</span></td><td>Program-anchored list</td><td><span class="pill-st reb">Re-scoped</span> as the <b>Roster</b> (Subjects), anchored to the Assessment.</td></tr>
+          <tr><td>Partners <span class="code-cell">/fieldwork/partners</span></td><td>Partner CRUD</td><td><span class="pill-st del">Deleted</span></td></tr>
+          <tr><td>Partner Follow-Up <span class="code-cell">/fieldwork/follow-up</span></td><td>Relay chasing</td><td><span class="pill-st del">Deleted</span> — its chase job → chase board + Chase Rounds.</td></tr>
+          <tr><td>Data Quality <span class="code-cell">/fieldwork/data-quality</span></td><td>Manual Pre/Post + partner aggregate</td><td><span class="pill-st rel">Demoted + Relocated</span> to the <b>Analysis</b> <span class="ar" lang="ar">(التحليل)</span> stage; partner-aggregate firewall cleaned up.</td></tr>
+          <tr><td>Interviews <span class="code-cell">/fieldwork/interviews</span></td><td>Island, feeds nothing</td><td><span class="pill-st reb">De-islanded</span> — becomes the <b>interview-mode of the chase board</b>, wired to the interview → indicator Link.</td></tr>
+          <tr><td>Surveys <span class="code-cell">/surveys</span></td><td>Flat survey list</td><td><span class="pill-st rel">Re-scoped + Relocated</span> to the <b>Design</b> <span class="ar" lang="ar">(التصميم)</span> stage (tool authoring: survey · records · interview guide).</td></tr>
+          <tr><td>Fieldwork Settings <span class="code-cell">ProgramDetail</span></td><td>SMS tiers + escalation + batch_count + target + schedule</td><td><span class="pill-st rel">Gutted</span>: SMS tiers + escalation + <span class="code-cell">batch_count</span> cut; schedule + instrument <b>move to the Assessment</b>; only <span class="code-cell">target</span> + <span class="code-cell">chase_after_days</span> survive.</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+    <div class="callout green reveal"><strong>Net:</strong> the Fieldwork group shrinks from <strong>8 tabs → ~2 Operator surfaces</strong> (triage landing + chase board, the latter absorbing Interviews) <strong>+ the Roster</strong>. Surveys → Design and Data Quality → Analysis leave the group. Partners + Partner Follow-Up die.</div>
+  </div>
+</section>
+
+<!-- ============ 9 · DECISIONS ============ -->
+<section id="decisions" class="sec">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">§9 — Decisions resolved</span>
+      <h2 class="sh">The ledger — twelve decisions, all closed.</h2>
+      <p class="sec-intro">Everything resolved in the grilling session. Genuine gaps are parked in Open Questions, not silently resolved here.</p>
+    </div>
+    <div class="tbl-wrap reveal ledger">
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th style="width:48px">#</th><th>Decision</th></tr></thead>
+        <tbody>
+          <tr><td><span class="num">1</span></td><td><b>The pipeline card = the Assessment</b>; Pre/Post is an explicit property, never a guessed wave.</td></tr>
+          <tr><td><span class="num">2</span></td><td><b>5 stages</b> grounded in the golden folder structure (identical across Al-Ahli, bin Mahfouz, Majid) + 3 cross-cutting folders; the spine is <b>always visible</b>, greyed when empty.</td></tr>
+          <tr><td><span class="num">3</span></td><td><b>Card advances on evidence, holds on approval.</b> Auto-advance retires the ClickUp drag; "approve" = promote to Approved Deliverables.</td></tr>
+          <tr><td><span class="num">4</span></td><td><b>Lead approves, Operator runs.</b> The approver is not the runner.</td></tr>
+          <tr><td><span class="num">5</span></td><td><b>Framing = commercial / contract, NOT the ToC.</b> The ToC lives in Design.</td></tr>
+          <tr><td><span class="num">6</span></td><td><b>Fieldwork = the per-assessment chase board</b>; landing = a triage list of assessments, worst-first.</td></tr>
+          <tr><td><span class="num">7</span></td><td><b>Deadline is a soft flag</b> — warns / reddens / re-ranks, never blocks. Breach is one signal, shared by pipeline + board.</td></tr>
+          <tr><td><span class="num">8</span></td><td><b>Chase Round</b> (rename of <span class="code-cell">sms_batches</span>) = the first-class, dated effort record; Round-grain is the Operator layer, person-grain attempts are the analyst layer.</td></tr>
+          <tr><td><span class="num">9</span></td><td><b>Sending stays external</b> — the board hands out a correct Non-respondent export; two moves only (Remind, Log / move-interview). Cut SMS tiers + escalation + <span class="code-cell">batch_count</span>.</td></tr>
+          <tr><td><span class="num">10</span></td><td><b>Baseline is first-class on every Post indicator</b>, with a provenance tag; a Pre card exists only when Pre data is collected.</td></tr>
+          <tr><td><span class="num">11</span></td><td><b>Subject is always a person</b>, optionally representing an org (which flips the unit of analysis to org grain).</td></tr>
+          <tr><td><span class="num">12</span></td><td><b>survey / interview / records are all "tools"</b>; the instrument routes the board (fill-and-return vs. interview lifecycle).</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 10 · PHASING ============ -->
+<section id="phasing" class="sec">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">§10 — Scope &amp; phasing</span>
+      <h2 class="sh">Chase board first, pipeline second, connectors later.</h2>
+    </div>
+    <div class="grid g3 reveal" style="align-items:start">
+      <div class="phase p1">
+        <div class="ph-h"><h3>The chase board</h3><span class="pill-ph">Phase 1</span></div>
+        <ul>
+          <li>Rebuild <span class="code-cell">EnumeratorDashboard</span> as the <strong>per-assessment chase board</strong> on real <span class="code-cell">assessment_id</span> scope (kill the guessed wave; delete partner grouping).</li>
+          <li>The <strong>Roster</strong> (Beneficiaries re-scoped to the Assessment) + the <span class="code-cell">represents_org</span> flag.</li>
+          <li><strong>Chase Rounds</strong> (rename <span class="code-cell">sms_batches</span>, +assessment_id, auto-numbered / dated, effort timeline).</li>
+          <li>The <strong>triage landing</strong> (Fieldwork Overview repurposed, worst-first).</li>
+          <li>The <strong>soft-flag deadline</strong> + three person-states + <span class="code-cell">chase_after_days</span> cadence; the three dates + soft threshold.</li>
+          <li><strong>Cut</strong> the tier / escalation / <span class="code-cell">batch_count</span> machinery; collapse to one Remind template + Log / move-interview.</li>
+          <li>Move schedule + instrument onto the Assessment; gut Fieldwork Settings; delete Partners + Partner Follow-Up.</li>
+        </ul>
+      </div>
+      <div class="phase p2">
+        <div class="ph-h"><h3>The pipeline</h3><span class="pill-ph">Phase 2</span></div>
+        <ul>
+          <li>The <strong>5-stage spine</strong> always visible in the sidebar; <strong>auto-advance</strong> on artifact triggers.</li>
+          <li><strong>Approval gates</strong> as holds (Lead default / Client optional) + <strong>Approved Deliverables</strong> promotion.</li>
+          <li>Relocate <strong>Surveys → Design</strong> and <strong>Data Quality → Analysis</strong>; de-island Interviews into the board.</li>
+          <li>Retire the ClickUp <span class="ar" lang="ar">خط الإنتاج</span>.</li>
+        </ul>
+      </div>
+      <div class="phase pf">
+        <div class="ph-h"><h3>Later</h3><span class="pill-ph">Future</span></div>
+        <ul>
+          <li>Deeper analyst <strong>data-quality / attrition</strong> — person-grain attempt history, matched-pair "responded at Pre, still owes Post."</li>
+          <li>Snapshot / round automation on the same effort spine.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 11 · SUCCESS ============ -->
+<section id="success" class="sec">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">§12 — Success criterion</span>
+      <h2 class="sh">The path that does not exist today.</h2>
+      <p class="sec-intro">One Operator, one assessment, end to end — Abdu chasing bin Mahfouz's 4 funded orgs.</p>
+    </div>
+    <div class="path reveal">
+      <div class="step"><div class="ico">1</div><div class="st">Abdu opens <b>Fieldwork</b> → the <b>triage landing</b> shows <b>bin Mahfouz › <span class="ar" lang="ar">الاستدامة المالية</span> › Post</b> near the top — <span class="mono">4 owing, deadline near</span>, <span class="rag r" style="margin:0 2px"></span> red dot.</div></div>
+      <div class="step"><div class="ico">2</div><div class="st">He clicks in → the board runs in <b>interview mode</b>, showing <b>4 org-Subjects</b> (each a person representing a funded organization) → he books slots.</div></div>
+      <div class="step"><div class="ico">3</div><div class="st">One slot <b>slips past the window</b> → that Subject flips <span class="chip-s st-a">At-risk</span> → <span class="chip-s st-r">Breached</span>, the header goes red (<span class="mono">"4 owing · 1 past deadline"</span>), and the card <b>climbs the triage.</b></div></div>
+      <div class="step"><div class="ico">4</div><div class="st">After <span class="mono">chase_after_days</span> passes the board lights up <b>"ready to chase,"</b> and he <b>exports the Non-respondent Chase Round.</b></div></div>
+      <div class="step"><div class="ico">5</div><div class="st">The <b>effort timeline</b> now reads <span class="mono" style="color:var(--forest)">Round 1 · Round 2 · Round 3</span>, and that evidence <b>flows into the Report</b> to justify the response rate.</div></div>
+    </div>
+    <div class="callout green reveal" style="font-size:21px;margin-top:36px">That path does not exist today. <strong style="font-style:normal;color:var(--forest)">This PRD is the path.</strong></div>
+  </div>
+</section>
+
+<!-- ============ 12 · OPEN QUESTIONS ============ -->
+<section id="questions" class="sec">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">§13 — Open questions / gaps flagged</span>
+      <h2 class="sh">Six gaps — not resolved here.</h2>
+      <p class="sec-intro">Genuine gaps or tensions noticed while writing the ledger, not new decisions. Surfaced for a call.</p>
+      <div class="qflag reveal">◆ For Anas to weigh in</div>
+    </div>
+    <div class="beats q reveal">
+      <div class="beat"><div class="bt"><b>"Collection-opened" vs. the Chase Round clock.</b> Before the <em>first</em> export there's no batch-exported date — so the first nudge presumably keys off <span class="mono">collection-opened + chase_after_days</span>, then later rounds off the last export. Implied but never stated. <b>Confirm.</b></div></div>
+      <div class="beat"><div class="bt"><b>Records tool with no "person" to chase.</b> The Roster always has a person, and records is sent to the org. For bin Mahfouz the contact exists — but is there ever a records case pulled from a system / document with <b>no human respondent</b>? If so, the chase board has no one to chase. <b>Confirm records always has a human Subject.</b></div></div>
+      <div class="beat"><div class="bt"><b>Auto-advance vs. approval gate ordering at Fieldwork-entry.</b> Design → Fieldwork auto-advances when the tool is <em>published</em>, but Design-exit has an instrument sign-off gate. Does publishing <em>imply</em> the sign-off, or can a tool be published while Design-exit is still unapproved? The two triggers could race. <b>Clarify whether "publish" is gated behind Design-exit approval.</b></div></div>
+      <div class="beat"><div class="bt"><b>Interview-mode "Non-respondent" semantics.</b> "# still owe" and the RED breach rollup are crisp for fill-and-return. For interviews, a Subject can be <em>scheduled</em> (not yet a respondent, but not idle). Does "# still owe" count SCHEDULED subjects, or only those with no slot? <b>The RAG math for interviews needs an explicit rule.</b></div></div>
+      <div class="beat"><div class="bt"><b>Group <span class="ar" lang="ar">(الفئة)</span> vs. Assessment identity.</b> The base PRD treats group as part of the Assessment's identity; §6 here calls it the "third axis inside an Assessment." These are consistent — §6 carries a reconciliation note — but <b>confirm Anas reads them as one thing, not a contradiction.</b></div></div>
+      <div class="beat"><div class="bt"><b>Which component owns the deadline-breach signal.</b> §5a (auto-advance) and §4b (chase board) consume the <em>same</em> breach signal ("target hit OR deadline passed"). Stated as one signal — good — but no single component is named as its emitter. <b>Name where the breach is computed once and read by both.</b></div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap reveal">
+    <p class="fin">The Assessment is the card that moves. <em>This PRD is the path.</em></p>
+    <div class="credit">
+      <span>Atharnami · Fieldwork PRD</span><span class="sep"></span>
+      <span>Owner: Baraa (Qararat)</span><span class="sep"></span>
+      <span>For review by: Anas</span><span class="sep"></span>
+      <span>Status: Draft for approval</span><span class="sep"></span>
+      <span>2026-07-01</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// progress bar
+const prog=document.getElementById('progress');
+const onScroll=()=>{
+  const h=document.documentElement;
+  const pct=(h.scrollTop)/(h.scrollHeight-h.clientHeight)*100;
+  prog.style.width=pct+'%';
+};
+document.addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+// reveal on scroll
+const io=new IntersectionObserver((es)=>{
+  es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
+},{rootMargin:'0px 0px -10% 0px',threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+// scroll-spy
+const secs=[...document.querySelectorAll('section[id]')];
+const links=new Map([...document.querySelectorAll('#navlinks a')].map(a=>[a.getAttribute('href').slice(1),a]));
+const spy=new IntersectionObserver((es)=>{
+  es.forEach(e=>{
+    if(e.isIntersecting){
+      links.forEach(a=>a.classList.remove('active'));
+      const a=links.get(e.target.id);if(a){a.classList.add('active');
+        a.scrollIntoView({inline:'center',block:'nearest'});}
+    }
+  });
+},{rootMargin:'-45% 0px -50% 0px'});
+secs.forEach(s=>spy.observe(s));
+</script>
+</body>
+</html>
