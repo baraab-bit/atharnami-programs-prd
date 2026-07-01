@@ -384,6 +384,38 @@ footer .credit .sep{width:4px;height:4px;border-radius:50%;background:var(--line
 .pill-st.reb{background:rgba(40,88,74,.12);color:var(--forest)}
 td .route{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--ink-faint);display:block;margin-top:3px}
 
+/* ---------- sidebar IA mockup (same idiom) ---------- */
+.sb-lay{display:grid;grid-template-columns:340px 1fr;gap:26px;align-items:start;margin-top:14px}
+@media(max-width:820px){.sb-lay{grid-template-columns:1fr}}
+.sb-nav{background:var(--card);border:1px solid var(--line);border-radius:var(--rad);box-shadow:var(--shadow);padding:12px 10px}
+.sb-brand{display:flex;align-items:center;gap:9px;padding:6px 10px 13px;border-bottom:1px solid var(--line-soft);margin-bottom:6px}
+.sb-brand .dot{width:9px;height:9px;border-radius:50%;background:var(--clay);box-shadow:0 0 0 4px rgba(178,91,54,.14);flex:none}
+.sb-brand .bn{font-family:'Fraunces',serif;font-weight:600;font-size:15px;letter-spacing:.1px}
+.sb-sec{margin:2px 0}
+.sb-sec.muted{opacity:.62}
+.sb-caption{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);font-weight:600;padding:10px 12px 4px}
+.sb-item{display:flex;align-items:center;gap:8px;padding:6px 12px;border-radius:8px;font-size:13.5px;color:var(--ink-soft);line-height:1.35}
+.sb-item:hover{background:rgba(40,88,74,.05)}
+.sb-item .ar{font-size:12.5px}
+.sb-item .later{color:var(--ink-faint);font-style:italic;font-size:12.5px}
+.sb-spine{position:relative;margin:6px 0;padding:4px 0}
+.sb-spine::before{content:"";position:absolute;left:23px;top:24px;bottom:24px;width:2px;border-radius:2px;background:linear-gradient(var(--forest),var(--clay));opacity:.4}
+.sb-stage{margin:1px 0}
+.sb-ghead{display:flex;align-items:center;gap:11px;padding:8px 12px 4px}
+.sb-badge{width:24px;height:24px;border-radius:50%;background:var(--forest);color:var(--paper-2);font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:grid;place-items:center;flex:none;position:relative;z-index:1;box-shadow:0 0 0 3px var(--card)}
+.sb-gtext{display:flex;flex-direction:column;gap:1px;line-height:1.15}
+.sb-gtext .gar{font-family:'IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:14.5px;color:var(--ink);direction:rtl}
+.sb-gtext .gen{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-faint);font-weight:600}
+.sb-stage .sb-item{padding-left:47px}
+.sb-stage.hot .sb-badge{background:var(--clay)}
+.sb-stage.hot .sb-gtext .gen{color:var(--clay)}
+.sb-tag{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;padding:1px 6px;border-radius:5px;background:rgba(40,88,74,.12);color:var(--forest);white-space:nowrap}
+.sb-tag.rep{background:rgba(176,122,24,.14);color:var(--amber)}
+.sb-notes{display:flex;flex-direction:column;gap:14px}
+.sb-notes .card{padding:18px 20px}
+.sb-notes .card p{font-size:14.5px;margin-top:4px}
+.sb-notes .card p .ar{font-size:14px}
+
 /* ---------- role split cards ---------- */
 .card.role-lead{border-color:rgba(40,88,74,.32);background:linear-gradient(180deg,#fff,rgba(40,88,74,.035))}
 .card.role-lead .k{color:var(--forest)}
@@ -979,9 +1011,103 @@ td .route{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--ink
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="sec-num">§8 — Navigation &amp; sidebar disposition</span>
-      <h2 class="sh">8 tabs collapse to ~2 surfaces + the Roster.</h2>
-      <p class="sec-intro">Surveys moves up to <strong>Design</strong>, Data Quality moves up to <strong>Analysis</strong>, and the two Partner tabs die. Below: today → what happens.</p>
+      <h2 class="sh">The sidebar becomes the five-stage spine.</h2>
+      <p class="sec-intro">The whole navigation reorganizes around the <strong>five Qararat pipeline stages</strong> — the golden production line, made into the platform's information architecture. Surveys becomes <strong>Instruments</strong> in Design, Data Quality moves up to <strong>Analysis</strong>, Interviews dissolves into the new <strong>Coverage</strong> <span class="ar" lang="ar">(نسبة التغطية)</span> tab, and the two Partner tabs die.</p>
     </div>
+
+    <div class="mock-cap reveal"><span class="badge-mk">Mockup</span> New sidebar — the 5-stage information architecture</div>
+    <div class="sb-lay reveal">
+      <!-- the sidebar column -->
+      <div class="sb-nav">
+        <div class="sb-brand"><span class="dot"></span><span class="bn">Atharnami</span></div>
+
+        <div class="sb-sec muted">
+          <div class="sb-caption">Overview · portfolio toggle</div>
+          <div class="sb-item">Overview</div>
+          <div class="sb-item">Alerts</div>
+        </div>
+
+        <div class="sb-spine">
+          <div class="sb-stage">
+            <div class="sb-ghead">
+              <span class="sb-badge">1</span>
+              <span class="sb-gtext"><span class="gar">التأطير</span><span class="gen">Framing</span></span>
+            </div>
+            <div class="sb-item">Organizations <span class="sb-tag">New</span></div>
+            <div class="sb-item">Programs <span class="sb-tag">New</span></div>
+            <div class="sb-item"><span class="later">later: Contract maker</span></div>
+          </div>
+
+          <div class="sb-stage">
+            <div class="sb-ghead">
+              <span class="sb-badge">2</span>
+              <span class="sb-gtext"><span class="gar">التصميم</span><span class="gen">Design</span></span>
+            </div>
+            <div class="sb-item">Impact Map</div>
+            <div class="sb-item">Instruments <span class="sb-tag rep">was Surveys</span></div>
+          </div>
+
+          <div class="sb-stage hot">
+            <div class="sb-ghead">
+              <span class="sb-badge">3</span>
+              <span class="sb-gtext"><span class="gar">العمل الميداني</span><span class="gen">Fieldwork</span></span>
+            </div>
+            <div class="sb-item">Fieldwork Overview</div>
+            <div class="sb-item">Roster</div>
+            <div class="sb-item">Coverage <span class="ar" lang="ar">(نسبة التغطية)</span> <span class="sb-tag rep">was Interviews</span></div>
+          </div>
+
+          <div class="sb-stage">
+            <div class="sb-ghead">
+              <span class="sb-badge">4</span>
+              <span class="sb-gtext"><span class="gar">التحليل</span><span class="gen">Analysis</span></span>
+            </div>
+            <div class="sb-item">Data Quality</div>
+            <div class="sb-item">Insights</div>
+            <div class="sb-item">Benchmarks</div>
+            <div class="sb-item">Custom Dashboards</div>
+          </div>
+
+          <div class="sb-stage">
+            <div class="sb-ghead">
+              <span class="sb-badge">5</span>
+              <span class="sb-gtext"><span class="gar">التقرير</span><span class="gen">Report</span></span>
+            </div>
+            <div class="sb-item">Reports</div>
+            <div class="sb-item">Impact Memory</div>
+            <div class="sb-item">Action Plans</div>
+          </div>
+        </div>
+
+        <div class="sb-sec muted">
+          <div class="sb-caption">Administration</div>
+          <div class="sb-item">Users</div>
+          <div class="sb-item">Settings</div>
+        </div>
+      </div>
+
+      <!-- the captions -->
+      <div class="sb-notes">
+        <div class="callout green" style="margin-top:0">The five stages become the sidebar <strong>spine</strong> — the golden Qararat production line, now the platform's information architecture. <span style="opacity:.75">Overview sits above it; Administration is de-emphasized below.</span></div>
+        <div class="card">
+          <span class="k">Framing · new</span>
+          <p><strong>Organizations</strong> + <strong>Programs</strong> finally get a home in the sidebar — the commercial layer that never had a front door.</p>
+        </div>
+        <div class="card">
+          <span class="k">Instruments · was Surveys</span>
+          <p>Authoring <strong>the tool</strong> — survey · records · interview guide — <strong>before Typeform</strong>, up in the Design <span class="ar" lang="ar">(التصميم)</span> stage.</p>
+        </div>
+        <div class="card">
+          <span class="k">Coverage · replaces Interviews</span>
+          <p><strong>Collection progress across every instrument</strong>: a survey is filled when Typeform returns · an interview when it's completed · records when the org returns them. Interviews now appear here as an <em>instrument</em>; scheduling lives in the chase board.</p>
+        </div>
+        <div class="card">
+          <span class="k">Two Fieldwork lenses</span>
+          <p><strong>Overview = priority</strong>, <strong>Coverage <span class="ar" lang="ar">(نسبة التغطية)</span> = status</strong> — both drill into the same chase board.</p>
+        </div>
+      </div>
+    </div>
+
     <div class="tbl-wrap reveal">
       <div class="tbl-scroll">
       <table>
@@ -993,14 +1119,15 @@ td .route{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--ink
           <tr><td>Partners <span class="code-cell">/fieldwork/partners</span></td><td>Partner CRUD</td><td><span class="pill-st del">Deleted</span></td></tr>
           <tr><td>Partner Follow-Up <span class="code-cell">/fieldwork/follow-up</span></td><td>Relay chasing</td><td><span class="pill-st del">Deleted</span> — its chase job → chase board + Chase Rounds.</td></tr>
           <tr><td>Data Quality <span class="code-cell">/fieldwork/data-quality</span></td><td>Manual Pre/Post + partner aggregate</td><td><span class="pill-st rel">Demoted + Relocated</span> to the <b>Analysis</b> <span class="ar" lang="ar">(التحليل)</span> stage; partner-aggregate firewall cleaned up.</td></tr>
-          <tr><td>Interviews <span class="code-cell">/fieldwork/interviews</span></td><td>Island, feeds nothing</td><td><span class="pill-st reb">De-islanded</span> — becomes the <b>interview-mode of the chase board</b>, wired to the interview → indicator Link.</td></tr>
-          <tr><td>Surveys <span class="code-cell">/surveys</span></td><td>Flat survey list</td><td><span class="pill-st rel">Re-scoped + Relocated</span> to the <b>Design</b> <span class="ar" lang="ar">(التصميم)</span> stage (tool authoring: survey · records · interview guide).</td></tr>
+          <tr><td>Interviews <span class="code-cell">/fieldwork/interviews</span></td><td>Island, feeds nothing</td><td><span class="pill-st del">Dissolved</span> → folds into the new <b>Coverage</b> <span class="ar" lang="ar">(نسبة التغطية)</span> tab; interview appears there as an <em>instrument</em>, <b>scheduling lives in the chase board</b>.</td></tr>
+          <tr><td>— <span class="code-cell">/fieldwork/coverage</span></td><td>—</td><td><span class="pill-st reb">New</span> <b>Coverage</b> <span class="ar" lang="ar">(نسبة التغطية)</span> — collection status across <b>all instruments</b> (survey filled when Typeform returns · interview when completed · records when the org returns it). The status lens; drills into the chase board.</td></tr>
+          <tr><td>Surveys <span class="code-cell">/surveys</span></td><td>Flat survey list</td><td><span class="pill-st rel">Renamed → Instruments</span> in the <b>Design</b> <span class="ar" lang="ar">(التصميم)</span> stage — tool authoring (survey · records · interview guide), <b>the tool before Typeform</b>.</td></tr>
           <tr><td>Fieldwork Settings <span class="code-cell">ProgramDetail</span></td><td>SMS tiers + escalation + batch_count + target + schedule</td><td><span class="pill-st rel">Gutted</span>: SMS tiers + escalation + <span class="code-cell">batch_count</span> cut; schedule + instrument <b>move to the Assessment</b>; only <span class="code-cell">target</span> + <span class="code-cell">chase_after_days</span> survive.</td></tr>
         </tbody>
       </table>
       </div>
     </div>
-    <div class="callout green reveal"><strong>Net:</strong> the Fieldwork group shrinks from <strong>8 tabs → ~2 Operator surfaces</strong> (triage landing + chase board, the latter absorbing Interviews) <strong>+ the Roster</strong>. Surveys → Design and Data Quality → Analysis leave the group. Partners + Partner Follow-Up die.</div>
+    <div class="callout green reveal"><strong>Net:</strong> the Fieldwork group resolves to three tabs on the spine — <strong>Overview</strong> (priority), <strong>Roster</strong>, and the new <strong>Coverage</strong> <span class="ar" lang="ar">(نسبة التغطية)</span> (status), all drilling into the chase board that absorbs Interviews. Surveys → <strong>Instruments</strong> (Design) and Data Quality → Analysis leave the group. Partners + Partner Follow-Up die.</div>
   </div>
 </section>
 
