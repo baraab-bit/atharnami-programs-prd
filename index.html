@@ -191,7 +191,7 @@ td.not{color:var(--ink-faint);font-style:italic}
 .leaf-row .chip.link{color:var(--clay);border-color:rgba(178,91,54,.3);background:rgba(178,91,54,.04)}
 .leaf-row .chip.val{color:var(--ink);border-color:var(--line)}
 .leaf-row .arr{color:var(--clay);font-weight:600}
-@media(max-width:760px){.hier .lvl,.hier .connector{margin-left:calc(var(--d,0)*16px)!important}.leaf-row{margin-left:0}}
+@media(max-width:760px){.hier .lvl,.hier .connector{margin-left:calc(var(--d,0)*16px)!important}.leaf-row{margin-left:0}.hier .leaf-row+.leaf-row{margin-top:18px!important}}
 
 /* ---------- the sentence ---------- */
 .sentence{
@@ -303,7 +303,7 @@ footer .credit .sep{width:4px;height:4px;border-radius:50%;background:var(--line
       <a class="nlink" href="#summary">Summary</a>
       <a class="nlink" href="#problem">Problem</a>
       <a class="nlink" href="#model">Model</a>
-      <a class="nlink" href="#link">The Link</a>
+      <a class="nlink" href="#link">Getting a number</a>
       <a class="nlink" href="#overview">Overview &amp; Health</a>
       <a class="nlink" href="#comparison">Comparison</a>
       <a class="nlink" href="#removals">Removals</a>
@@ -321,7 +321,7 @@ footer .credit .sep{width:4px;height:4px;border-radius:50%;background:var(--line
     <div class="eyebrow"><span class="rule"></span>Product Requirements · v3 · Draft for approval</div>
     <h1 class="title">Programs that <em>repeat</em>, measured <em>per&nbsp;run</em>.</h1>
     <p class="subtitle">Editions, Assessments &amp; the Input&nbsp;→&nbsp;Indicator Link.</p>
-    <p class="lede">Atharnami's core unit today is a single flat <strong>Program</strong> with a single flat <strong>Theory of Change</strong> — and it breaks the moment reality arrives. This PRD introduces a clean hierarchy — <strong>Organization → Program → Edition → Assessment</strong> — where the Assessment owns the ToC, plus a source-agnostic <strong>Link</strong> that turns a survey question into a reviewed indicator value with full provenance. Along the way it removes two concepts that added confusion without truth.</p>
+    <p class="lede">Atharnami's core unit today is a single flat <strong>Program</strong> with a single flat <strong>Theory of Change</strong> — and it breaks the moment reality arrives. This PRD introduces a clean hierarchy — <strong>Organization → Program → Edition → Assessment</strong> — where the Assessment owns the ToC. Most indicators — inputs, activities, outputs — are administrative numbers the client hands over, <strong>entered manually</strong>; only the outcomes that must be <em>computed from what respondents said</em> flow through a source-agnostic <strong>Link</strong>, with full provenance. Along the way it removes two concepts that added confusion without truth.</p>
     <div class="meta-row">
       <span class="tag accent">For review by&nbsp; <b>Anas</b></span>
       <span class="tag">Owner&nbsp; <b>Baraa · Qararat</b></span>
@@ -339,7 +339,7 @@ footer .credit .sep{width:4px;height:4px;border-radius:50%;background:var(--line
       <h2 class="sh">The whole thing, in one breath.</h2>
     </div>
     <p class="body reveal" style="font-size:19px;max-width:70ch">A real program <strong>repeats</strong> — every year, or several cohorts a year. It is <strong>evaluated per run</strong>, sometimes <strong>pre and post</strong>, sometimes for <strong>different groups of people</strong> — and each of those needs <strong>its own ToC and its own numbers</strong>. On top of that, even when data is collected, there is no way to turn a survey into an indicator's number — the pipeline was never built.</p>
-    <div class="callout green reveal">This PRD introduces a clean hierarchy where the Assessment owns the ToC, and a source-agnostic Link that turns a survey question — later interviews, records — into a reviewed indicator value with full provenance.</div>
+    <div class="callout green reveal">A clean hierarchy where the Assessment owns the ToC — and most indicators (inputs, activities, outputs) are administrative numbers entered manually. Only the outcomes computed from what respondents said flow through a source-agnostic Link — survey now, interviews and records later — into a reviewed value with full provenance.</div>
     <div class="grid g3 reveal" style="margin-top:32px">
       <div class="card">
         <span class="k">What's new</span>
