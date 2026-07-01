@@ -435,6 +435,7 @@ td .route{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--ink
     <div class="links" id="navlinks">
       <a class="nlink" href="#problem">Problem</a>
       <a class="nlink" href="#pipeline">Pipeline</a>
+      <a class="nlink" href="#contract">Indicator↔Instrument</a>
       <a class="nlink" href="#glossary">Glossary</a>
       <a class="nlink" href="#board">Chase Board</a>
       <a class="nlink" href="#advance">Auto-advance</a>
@@ -445,7 +446,7 @@ td .route{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--ink
       <a class="nlink" href="#decisions">Decisions</a>
       <a class="nlink" href="#phasing">Phasing</a>
       <a class="nlink" href="#success">Success</a>
-      <a class="nlink" href="#questions">Open Qs</a>
+      <a class="nlink" href="#questions">Resolved</a>
     </div>
   </div>
 </nav>
@@ -597,6 +598,93 @@ td .route{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--ink
   </div>
 </section>
 
+<!-- ============ 2.5 · INDICATOR↔INSTRUMENT CONTRACT ============ -->
+<section id="contract" class="sec">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">§6 — The indicator↔instrument contract</span>
+      <h2 class="sh">An indicator is a <em style="color:var(--clay)">demand for data</em> — it names its instrument, and the instrument is built from those demands.</h2>
+      <p class="sec-intro">The ToC and the Instruments builder are <strong>two ends of one contract</strong>. The base PRD's Link ran one way — point an indicator at an <em>existing</em> question. This adds the other direction: at design time every indicator <strong>declares its data demand up front</strong> — a <span class="chip-s pre">pending</span> binding that exists <strong>before any question is authored</strong> — and authoring the field later <strong>resolves</strong> it. That is why both live in the <span class="ar" lang="ar">② التصميم</span> / <strong>Design</strong> stage.</p>
+    </div>
+
+    <!-- mental-model sentence -->
+    <div class="sentence reveal">
+      <div class="lbl">The contract, read as one line</div>
+      <div class="s-line">
+        <span class="pill q"><span class="pk">indicator</span> avg annual budget</span>
+        <span class="arrow">→</span>
+        <span class="pill src"><span class="pk">source_type</span> Records</span>
+        <span class="pill flt"><span class="pk">needs</span> annual budget (numeric)</span>
+        <span class="pill agg"><span class="pk">aggregation</span> average</span>
+        <span class="arrow">→</span>
+        <span class="result">pending binding <span class="n">(no question yet)</span></span>
+      </div>
+      <div class="s-note">Declared at ToC-design time — the demand exists before a single field is authored.</div>
+    </div>
+
+    <!-- design-time → instrument-build flow -->
+    <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin:54px 0 0" class="reveal">From demand to field — one flow across two ends</h3>
+    <div class="pipeline reveal">
+      <div class="pstage">
+        <span class="snum">DESIGN TIME · ToC</span>
+        <div class="pen">Indicator declares</div>
+        <div class="pmap"><b>"avg annual budget"</b> → <span class="code-cell">source_type = Records</span> · needs <b>"annual budget (numeric)"</b> · aggregation = <b>average</b>.</div>
+        <div class="tagline">a pending binding</div>
+      </div>
+      <span class="parrow">→</span>
+      <div class="pstage hot">
+        <span class="snum">INSTRUMENT BUILD · Records</span>
+        <div class="pen">Builder lists the demand</div>
+        <div class="pmap">Open the <b>Records</b> tool → it lists <span class="code-cell">annual budget (numeric) — for "avg annual budget"</span> as a field to create.</div>
+        <div class="tagline">authoring resolves it</div>
+      </div>
+      <span class="parrow">→</span>
+      <div class="pstage">
+        <span class="snum">RESOLVED</span>
+        <div class="pen">Binding closed</div>
+        <div class="pmap">Authoring that field <b>resolves</b> the binding — <span class="code-cell">indicator ← the annual-budget field</span>. Later, Compute &amp; review turns collected values into the number.</div>
+        <div class="tagline">then computed</div>
+      </div>
+    </div>
+    <span class="pipe-note reveal"><span class="kk">same object</span> <b>both ends</b> — the ToC declares the demand; the builder fulfils it. One binding, two directions.</span>
+
+    <!-- lifecycle table -->
+    <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin:54px 0 0" class="reveal">6a · The binding lifecycle</h3>
+    <div class="tbl-wrap reveal">
+      <div class="tbl-scroll">
+      <table>
+        <caption>declared / pending → resolved → computed</caption>
+        <thead><tr><th style="width:24%">Lifecycle stage</th><th style="width:34%">Where</th><th>What exists</th></tr></thead>
+        <tbody>
+          <tr><td><span class="chip-s pre">declared / pending</span></td><td>ToC design — the indicator names <span class="code-cell">source_type</span> + the field it needs</td><td>a <b>demand</b>, no question yet</td></tr>
+          <tr><td><span class="chip-s post">resolved</span></td><td>Instruments builder — a field is authored to the demand</td><td><b>indicator ← that field</b></td></tr>
+          <tr><td><span class="chip-s only">computed</span></td><td>Compute &amp; review (base PRD)</td><td>the reviewed number</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+    <div class="callout reveal"><strong><span class="code-cell" style="font-size:14px">source_type</span> is first-class and required</strong> on every indicator — <span class="chip-s pre">survey</span> · <span class="chip-s post">interview</span> · <span class="chip-s only">record</span>. An indicator is a demand for data and <strong>must name which instrument feeds it.</strong></div>
+
+    <!-- three dialects -->
+    <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin:54px 0 0" class="reveal">6c · Records is a first-class <em style="color:var(--clay)">third</em> instrument</h3>
+    <p class="body reveal">The Instruments wizard already authors survey and interview questions. <strong>Records is added as a third mode</strong> — a survey-shaped form of fields an organization representative fills (budget, staff counts, …). <em>"A record is just a <span class="ar" lang="ar">سجلات</span> — a survey with an org as the respondent."</em> Three dialects, <strong>one indicator-driven builder.</strong></p>
+    <div class="tbl-wrap reveal">
+      <div class="tbl-scroll">
+      <table>
+        <caption>The three instrument dialects — one builder</caption>
+        <thead><tr><th style="width:24%">Dialect</th><th style="width:34%">Respondent</th><th>Authored as</th></tr></thead>
+        <tbody>
+          <tr><td><span class="term" style="color:var(--forest)">survey</span></td><td>a person, about themselves</td><td>questions</td></tr>
+          <tr><td><span class="term" style="color:var(--clay)">interview</span></td><td>a person, scheduled</td><td>an interview guide</td></tr>
+          <tr><td><span class="term">records <span class="ar" lang="ar">سجلات</span></span></td><td><b>an organization</b> (its representative)</td><td>survey-shaped fields</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+    <div class="callout green reveal">It lives in the <span class="ar" lang="ar">② التصميم</span> / <strong>Design</strong> stage — <strong>ToC / indicators and the Instruments builder are the two ends of one contract.</strong> The indicator declares; the field resolves; the same binding carries through to <span class="code-cell">computed</span>.</div>
+  </div>
+</section>
+
 <!-- ============ 3 · GLOSSARY ============ -->
 <section id="glossary" class="sec">
   <div class="wrap">
@@ -708,23 +796,32 @@ td .route{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--ink
     <div class="callout reveal"><strong>Deadline + instrument are Assessment attributes</strong> — fieldwork <em>reads</em> them, it does not own them. The instrument <strong>routes the board</strong>: fill-and-return (survey / records) → non-responder chase; interview → schedule-then-conduct.</div>
 
     <!-- 4b two clocks + person states -->
-    <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin:56px 0 0" class="reveal">4b · Two clocks &amp; the three person-states</h3>
+    <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin:56px 0 0" class="reveal">4b · Two clocks &amp; the person-states</h3>
     <p class="body reveal">There are two clocks — the assessment's <strong>window</strong> (one deadline for everyone) and each person's <strong>slot</strong> (a booked time you can reschedule). A Subject's state is where their slot sits relative to the window. <span style="color:var(--ink-faint)">The per-person slot machinery already exists in code (<span class="code-cell">interview-lifecycle.ts</span>).</span></p>
     <div class="states reveal">
       <div class="state sched">
         <div class="sh-row"><span class="chip-s st-g">Scheduled</span></div>
-        <p>Future slot, <b>within the window.</b></p>
+        <p>Booked future slot, within the window — <b>its own chip.</b> <b>Still owes</b> (booked ≠ collected).</p>
+      </div>
+      <div class="state risk" style="border-color:var(--line)">
+        <div class="sh-row"><span class="chip-s only">Pending</span></div>
+        <p>Owes and has <b>no slot yet</b> — needs a slot. <b>Still owes.</b></p>
       </div>
       <div class="state risk">
         <div class="sh-row"><span class="chip-s st-a">At-risk</span></div>
-        <p>Slot has passed, <b>or</b> the next booked slot is beyond the deadline.</p>
+        <p>Slot has passed, <b>or</b> the next booked slot is beyond the deadline. <b>Still owes.</b></p>
       </div>
       <div class="state breach">
         <div class="sh-row"><span class="chip-s st-r">Breached</span></div>
-        <p>Deadline passed and they <b>still owe.</b></p>
+        <p>Deadline passed and they still owe (<b>red</b>). <b>Still owes.</b></p>
+      </div>
+      <div class="state sched">
+        <div class="sh-row"><span class="chip-s st-g">Completed</span></div>
+        <p>Collected. The <b>only</b> state that counts toward <b>rate / Coverage.</b></p>
       </div>
     </div>
-    <div class="callout reveal">The <strong>deadline is a soft flag</strong> — it never blocks booking or logging past it — but a breach <strong>rolls up RED</strong> to the board header ("118 owing · 12 past deadline") and pushes the assessment up the triage. A separate, milder <strong>stale-contact cadence</strong> (<span class="mono" style="font-style:normal;font-size:15px">chase_after_days</span>, renamed from <span class="mono" style="font-style:normal;font-size:15px">overdue_after_days</span>) orders the daily mid-window queue, independent of the hard deadline.</div>
+    <div class="callout reveal"><strong>"# still owe" = Roster − Completed.</strong> A <strong>Scheduled</strong> interview <strong>still owes</strong> ("owe" = <em>not collected yet</em>) — but the owing is broken into distinct sub-states, each on its own chip: <span class="chip-s st-g">Scheduled</span> · <span class="chip-s only">Pending</span> · <span class="chip-s st-a">At-risk</span> · <span class="chip-s st-r">Breached</span>. <strong>Rate / Coverage (done) = Completed only</strong> — a booked interview never inflates the rate. (§15.4)</div>
+    <div class="callout reveal">The <strong>deadline is a soft flag</strong> — it never blocks booking or logging past it — but a breach <strong>rolls up RED</strong> to the board header ("118 owing · 12 past deadline") and pushes the assessment up the triage. <strong>A breach never auto-closes:</strong> <span class="code-cell">deadline_passed</span> keeps the assessment <strong>open</strong> and <strong>red</strong> and escalates a <strong>Lead decision — <span style="color:var(--clay)">Extend</span> or <span style="color:var(--red)">Force-close</span></strong> (§15.6). A separate, milder <strong>stale-contact cadence</strong> (<span class="mono" style="font-style:normal;font-size:15px">chase_after_days</span>, renamed from <span class="mono" style="font-style:normal;font-size:15px">overdue_after_days</span>) orders the daily mid-window queue, independent of the hard deadline.</div>
 
     <!-- 4c three dates -->
     <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin:56px 0 0" class="reveal">4c · The three dates + the soft threshold</h3>
@@ -807,8 +904,8 @@ td .route{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--ink
         <thead><tr><th style="width:38%">From → To</th><th>Fires when the real artifact exists</th></tr></thead>
         <tbody>
           <tr><td><span class="term">Framing → Design</span></td><td>Results framework defined</td></tr>
-          <tr><td><span class="term">Design → Fieldwork</span></td><td>Tool / instrument <b>published</b></td></tr>
-          <tr><td><span class="term">Fieldwork → Analysis</span></td><td>Collection closed — <b>target hit OR deadline passed</b> (the <em>same</em> breach signal from §4b)</td></tr>
+          <tr><td><span class="term">Design → Fieldwork</span></td><td>Instrument <b>published</b> — and Publish unlocks <b>only after the Lead approves the instrument</b> (§15.3); publishing starts collection <em>and</em> advances the card</td></tr>
+          <tr><td><span class="term">Fieldwork → Analysis</span></td><td>Collection <b>closes on <span class="code-cell">target_met</span> OR Lead <span class="code-cell">force-close</span></b> — <b>never on the deadline alone.</b> A breach flags <span class="rag r" style="margin:0 3px"></span> <b>red</b> but does <em>not</em> advance the card (§4b, §15.6).</td></tr>
           <tr><td><span class="term">Analysis → Report</span></td><td>Insights generated</td></tr>
           <tr><td><span class="term">Report → Done</span></td><td>Report delivered</td></tr>
         </tbody>
@@ -816,6 +913,7 @@ td .route{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--ink
       </div>
     </div>
     <div class="callout reveal">No manual dragging. Auto-advance is precisely what <strong>replaces the manual ClickUp drag.</strong></div>
+    <div class="callout green reveal">The deadline never auto-closes. Passing it gives the Lead <strong>two actions — <span style="color:var(--clay)">Extend the deadline</span> or <span style="color:var(--red)">Force-close</span></strong> — a <strong>red flag, not an auto-close.</strong> Only <span class="code-cell" style="font-size:14px">target_met</span> or the Lead's <span class="code-cell" style="font-size:14px">force_close</span> advances Fieldwork → Analysis.</div>
 
     <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin:56px 0 0" class="reveal">5b · Approval gates — holds that block auto-advance</h3>
     <div class="tbl-wrap reveal">
@@ -1136,8 +1234,8 @@ td .route{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--ink
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="sec-num">§9 — Decisions resolved</span>
-      <h2 class="sh">The ledger — fourteen decisions, all closed.</h2>
-      <p class="sec-intro">Everything resolved in the grilling session. Genuine gaps are parked in Open Questions, not silently resolved here.</p>
+      <h2 class="sh">The ledger — seventeen decisions, all closed.</h2>
+      <p class="sec-intro">Everything resolved in the grilling session — plus the three the Anas review folded in: the indicator↔instrument contract, records as a third instrument, and the asymmetric close. The six once-open gaps are now settled decisions (see <a href="#questions" style="color:var(--clay);text-decoration:none;border-bottom:1px solid rgba(178,91,54,.4)">Resolved</a>).</p>
     </div>
     <div class="tbl-wrap reveal ledger">
       <div class="tbl-scroll">
@@ -1158,6 +1256,9 @@ td .route{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--ink
           <tr><td><span class="num">12</span></td><td><b>survey / interview / records are all "tools"</b>; the instrument routes the board (fill-and-return vs. interview lifecycle).</td></tr>
           <tr><td><span class="num">13</span></td><td><b>The Roster is imported onto the Assessment</b>; Pre is a fresh import, <b>Post clones the Pre Roster forward</b> and match-reconciles a new list (matched carry forward, unmatched = attrition, new = added).</td></tr>
           <tr><td><span class="num">14</span></td><td><b>Parent Contact</b> <span class="ar" lang="ar">(الجهة الأم)</span> is a plain reference column on the Subject — a deliberate lightweight trace of the removed Partner, <b>not a re-introduction.</b></td></tr>
+          <tr><td><span class="num">15</span></td><td><b>The indicator↔instrument contract</b> — every indicator declares its source instrument type + needed field up front; <span class="code-cell">source_type</span> is <b>first-class / required</b>; binding lifecycle <span class="code-cell">declared → resolved → computed</span>; the Instruments builder is <b>indicator-driven</b> (§6).</td></tr>
+          <tr><td><span class="num">16</span></td><td><b>Records is a first-class third instrument</b> — survey · interview · <b>records</b> <span class="ar" lang="ar">(سجلات)</span>, one indicator-driven builder ("a record is a survey with an org as respondent").</td></tr>
+          <tr><td><span class="num">17</span></td><td><b>One data-layer collection status, computed once</b>, read by both pipeline + board; <b>asymmetric close</b> — <span class="code-cell">target_met</span> <b>auto-closes → auto-advances</b>, <span class="code-cell">deadline_passed</span> <b>never</b> auto-closes (red + Lead decision <b>Extend / Force-close</b>); only <span class="code-cell">target_met</span> or <span class="code-cell">force_closed</span> advance to Analysis (§15.6).</td></tr>
         </tbody>
       </table>
       </div>
@@ -1224,22 +1325,22 @@ td .route{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--ink
   </div>
 </section>
 
-<!-- ============ 12 · OPEN QUESTIONS ============ -->
+<!-- ============ 12 · RESOLVED (Anas review) ============ -->
 <section id="questions" class="sec">
   <div class="wrap">
     <div class="sec-head reveal">
-      <span class="sec-num">§13 — Open questions / gaps flagged</span>
-      <h2 class="sh">Six gaps — not resolved here.</h2>
-      <p class="sec-intro">Genuine gaps or tensions noticed while writing the ledger, not new decisions. Surfaced for a call.</p>
-      <div class="qflag reveal">◆ For Anas to weigh in</div>
+      <span class="sec-num">§15 — Resolved decisions (Anas review)</span>
+      <h2 class="sh">The six gaps — now <em style="color:var(--forest)">settled</em>.</h2>
+      <p class="sec-intro">Anas reviewed the six gaps flagged in the draft. All six are now <strong>settled decisions</strong>; the mechanics are threaded into the body sections noted.</p>
+      <div class="qflag reveal" style="color:var(--forest);background:rgba(40,88,74,.08);border-color:rgba(40,88,74,.24)">✓ Reviewed &amp; closed by Anas</div>
     </div>
-    <div class="beats q reveal">
-      <div class="beat"><div class="bt"><b>"Collection-opened" vs. the Chase Round clock.</b> Before the <em>first</em> export there's no batch-exported date — so the first nudge presumably keys off <span class="mono">collection-opened + chase_after_days</span>, then later rounds off the last export. Implied but never stated. <b>Confirm.</b></div></div>
-      <div class="beat"><div class="bt"><b>Records tool with no "person" to chase.</b> The Roster always has a person, and records is sent to the org. For bin Mahfouz the contact exists — but is there ever a records case pulled from a system / document with <b>no human respondent</b>? If so, the chase board has no one to chase. <b>Confirm records always has a human Subject.</b></div></div>
-      <div class="beat"><div class="bt"><b>Auto-advance vs. approval gate ordering at Fieldwork-entry.</b> Design → Fieldwork auto-advances when the tool is <em>published</em>, but Design-exit has an instrument sign-off gate. Does publishing <em>imply</em> the sign-off, or can a tool be published while Design-exit is still unapproved? The two triggers could race. <b>Clarify whether "publish" is gated behind Design-exit approval.</b></div></div>
-      <div class="beat"><div class="bt"><b>Interview-mode "Non-respondent" semantics.</b> "# still owe" and the RED breach rollup are crisp for fill-and-return. For interviews, a Subject can be <em>scheduled</em> (not yet a respondent, but not idle). Does "# still owe" count SCHEDULED subjects, or only those with no slot? <b>The RAG math for interviews needs an explicit rule.</b></div></div>
-      <div class="beat"><div class="bt"><b>Group <span class="ar" lang="ar">(الفئة)</span> vs. Assessment identity.</b> The base PRD treats group as part of the Assessment's identity; §6 here calls it the "third axis inside an Assessment." These are consistent — §6 carries a reconciliation note — but <b>confirm Anas reads them as one thing, not a contradiction.</b></div></div>
-      <div class="beat"><div class="bt"><b>Which component owns the deadline-breach signal.</b> §5a (auto-advance) and §4b (chase board) consume the <em>same</em> breach signal ("target hit OR deadline passed"). Stated as one signal — good — but no single component is named as its emitter. <b>Name where the breach is computed once and read by both.</b></div></div>
+    <div class="beats reveal">
+      <div class="beat"><div class="bt"><b>The chase clock counts from the most recent OUTREACH.</b> The nudge counts from the <b>last Chase Round export</b> if one exists, else <span class="mono">Collection-opened + chase_after_days</span> before any round has gone out. "Initial send" and "a chase round" are the <b>same kind of event</b> — an outreach — and the board measures <b>days since the last one.</b> One clock, one rule. → §4c.</div></div>
+      <div class="beat"><div class="bt"><b>Records ALWAYS has a human.</b> Two modes, both handled by Coverage: <b>sent-to-fill</b> — a survey-shaped records tool the <b>org rep</b> fills, <b>chaseable via Remind</b> like a survey; or <b>internally-entered</b> — <b>Abdu</b> reads the paperwork and keys the numbers, a <b>completion task on Coverage</b> ("entered / not yet"; next move "enter it"; no external Remind). "Non-respondent" never points at no one. → §7, §10b, §6c.</div></div>
+      <div class="beat"><div class="bt"><b>Approval GATES publishing — ordered, no race.</b> The order is fixed: <b>ToC → Lead approves the instrument → "Publish" unlocks → publishing starts collection AND auto-advances Design→Fieldwork.</b> The Publish button is <b>disabled</b> until the Lead signs off; there is <b>no unapproved data collection.</b> → §5a, §5b.</div></div>
+      <div class="beat"><div class="bt"><b>"# still owe" = Roster − Completed.</b> A <b>Scheduled</b> interview <b>still owes</b> ("owe" = <em>not collected yet</em>), shown broken into distinct sub-states — <b>Scheduled</b> (booked, own chip) · <b>Pending</b> (needs a slot) · <b>At-risk</b> · <b>Breached</b> (red). <b>Rate / Coverage (done) = Completed only</b> — a booked interview does <b>not</b> inflate the rate. → §4b.</div></div>
+      <div class="beat"><div class="bt"><b>Group <span class="ar" lang="ar">(الفئة)</span> = a SEPARATE Assessment.</b> A different group is a separate Assessment (<b>Pre/Post × group</b>), each with its <b>own Roster / ToC / board</b> — <b>never</b> a sub-division <em>inside</em> one assessment. Consistent with the base PRD; the reconciliation note stays. → §7.</div></div>
+      <div class="beat"><div class="bt"><b>One data-layer collection status, computed ONCE</b> per assessment, read by <b>both</b> pipeline and board — the "compute once, read everywhere" lesson vs. the old guessed-wave bug. Behavior is <b>asymmetric</b>: <span class="code-cell">target_met</span> <b>auto-closes → auto-advances</b> (the only automatic close); <span class="code-cell">deadline_passed</span> <b>does NOT auto-close</b> — stays open, flags <span class="rag r" style="margin:0 2px"></span> <b>red</b>, and escalates a <b>Lead decision: Extend the deadline OR Force-close</b>; <span class="code-cell">force_closed</span> is the Lead's manual close. → §5a, §4b.</div></div>
     </div>
   </div>
 </section>
